@@ -1,0 +1,2421 @@
+/* Global: scrolling remains enabled, but no visible scrollbar is rendered anywhere. */
+*,*::before,*::after{scrollbar-width:none;-ms-overflow-style:none;}
+*::-webkit-scrollbar{width:0!important;height:0!important;display:none!important;}
+html.app-loading body{visibility:hidden;}
+:root{--bg:#020203;--panel:#14121a;--panel2:#1b1822;--text:#f3eef8;--muted:#9d96a8;--accent:#a855f7;--accent2:#c084fc;--border:#2a2532;--like:#FF5FB8;--progress:#A970FF;--normal:#AFA9BD;--dislike:#FF5F6D;--planned:#5B8CFF;--favorite:#FFC94D;--total:#67E8F9;}
+*{box-sizing:border-box;}
+html{background:var(--bg);scroll-behavior:auto;scrollbar-width:none;-ms-overflow-style:none;}
+html::-webkit-scrollbar{width:0;height:0;}
+body{padding-top:42px!important;margin:0;scrollbar-width:none;-ms-overflow-style:none;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;position:relative;min-height:100vh;}
+body::-webkit-scrollbar{width:0;height:0;}
+button,input,select,textarea{font:inherit;box-sizing:border-box;}input,textarea,select,[contenteditable="true"]{user-select:text;-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;}
+button:focus:not(:focus-visible){outline:none;}
+button:focus:not(:focus-visible),a:focus:not(:focus-visible),input:focus:not(:focus-visible),select:focus:not(:focus-visible),textarea:focus:not(:focus-visible){outline:none!important;}
+button,input,select,textarea{border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);}
+button{padding:8px 12px;cursor:pointer;}
+button:hover{border-color:#5e3c78;color:#eee;background:#1b1722;}
+button.primary{border-color:#7136a5;background:#21152c;color:#eadbfa;}
+button.primary:hover{background:#2a1737;}
+.danger:hover{border-color:#a94a58!important;background:#3a1d23!important;color:#ffd7dc!important;box-shadow:0 0 0 1px rgba(255,95,109,.12),0 0 14px rgba(255,95,109,.12);}
+#trashData.has-items{border-color:#70459a;background:#21172b;color:#e8d8f5;box-shadow:inset 0 0 0 1px rgba(168,85,247,.08),0 0 12px rgba(168,85,247,.08);}
+#trashData.has-items:hover{border-color:#9b63ca;background:#2b1b38;color:#f5eafb;box-shadow:inset 0 0 0 1px rgba(192,132,252,.10),0 0 18px rgba(168,85,247,.18);}
+input,select,textarea{padding:9px 11px;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:#7440a0;box-shadow:0 0 0 2px rgba(116,64,160,.12);}
+.wrap{max-width:1250px;margin:0 auto;padding-left:24px;padding-right:24px;}
+header{background:transparent;padding:28px 0 22px;}
+.topline{display:flex;align-items:center;justify-content:center;gap:0;}
+.data-actions{position:relative;display:flex;align-items:center;justify-content:center;gap:0;white-space:nowrap;margin:0;min-height:34px;height:34px;width:100%;}
+.data-core{display:flex;align-items:center;justify-content:center;gap:16px;height:34px;}
+.data-actions button,.data-actions .save{height:34px;min-height:34px;padding:0 12px;font-size:12px;line-height:1;display:inline-flex;align-items:center;justify-content:center;}
+.data-actions .add-game-action{position:relative;overflow:hidden;gap:6px;transition:border-color .16s,background .16s,color .16s,box-shadow .16s,transform .16s;}.data-actions .add-game-action .action-icon{font-size:16px;line-height:1;font-weight:500;opacity:.95;}.data-actions .add-game-action .action-label{line-height:1;}.data-actions .add-game-action:hover{border-color:#9750cf;background:#2a1837;color:#f7eaff;box-shadow:0 0 0 1px rgba(192,132,252,.10),0 0 18px rgba(201,104,255,.20);transform:translateY(-1px);}.data-actions .add-game-action:active{transform:translateY(0) scale(.985);box-shadow:0 0 10px rgba(201,104,255,.12);}.data-actions .add-game-action:focus-visible{outline:2px solid rgba(192,132,252,.60);outline-offset:2px;}.data-actions .data-action{position:relative;transition:border-color .16s,background .16s,color .16s,box-shadow .16s,transform .16s;}.data-actions .data-action::first-letter{font-size:14px;}.data-actions .export-action{border-color:#3d3450;background:#17141d;color:#d8cce2;}.data-actions .export-action:hover{border-color:#6d4f8a;background:#21192a;color:#f0e7f5;box-shadow:0 0 0 1px rgba(168,85,247,.08),0 0 12px rgba(168,85,247,.10);transform:translateY(-1px);}.data-actions .import-action{border-color:#3b4b63;background:#151a22;color:#cbd7e8;}.data-actions .import-action:hover{border-color:#5f83ad;background:#192331;color:#e4eefb;box-shadow:0 0 0 1px rgba(91,140,255,.08),0 0 12px rgba(91,140,255,.10);transform:translateY(-1px);}.data-actions .data-action:active{transform:translateY(0);}.data-actions .data-action:focus-visible{outline:2px solid rgba(192,132,252,.55);outline-offset:2px;}.data-actions .data-action .action-icon{font-size:14px;line-height:1;margin-right:6px;opacity:.9;}.data-actions .data-action .action-label{line-height:1;}
+main.wrap{padding-top:24px;padding-bottom:50px;}
+.stats-panel{margin:0 0 16px;}
+.quick-stats{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;width:100%;}
+.stat-card{min-height:78px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:13px;border:1px solid var(--border);border-radius:13px;background:#14121a;color:var(--text);text-align:left;cursor:pointer;font:inherit;position:relative;overflow:hidden;transition:border-color .16s,background .16s,box-shadow .16s,color .16s,transform .16s,filter .16s;}
+.stat-card:not(.active):hover{transform:translateY(-1px);filter:brightness(1.08);border-color:#4a4252;box-shadow:0 6px 16px rgba(0,0,0,.18);}
+.stat-card b{display:block;font-size:22px;line-height:1.1;font-weight:700;}
+ .stat-card span{font-size:12px;line-height:1.2;}
+.stat-label{display:flex!important;align-items:center;justify-content:flex-start;gap:7px;}
+.stat-label .lucide-icon{width:18px;height:18px;flex:none;display:block;pointer-events:none;}
+/* Статистика: как в Кинотеке, но без постоянной цветной обводки. Цветная обводка появляется только у активного фильтра. */
+.stat-card:not(.active){border-color:var(--border);box-shadow:none;}
+.stat-card.total-card{background:#14121a;}
+.stat-card.total-card b{color:var(--total);text-shadow:none;}.stat-card.total-card span{color:#ffb0d5;}
+.stat-card[data-filter-rating="Прохожу"]{background:#14121a;}
+.stat-card[data-filter-rating="Прохожу"] b{color:#A970FF;text-shadow:none;}.stat-card[data-filter-rating="Прохожу"] span{color:#D2B6FF;}
+.stat-card[data-filter-rating="Понравилось"]{background:#14121a;}
+.stat-card[data-filter-rating="Понравилось"] b{color:var(--like);text-shadow:none;}.stat-card[data-filter-rating="Понравилось"] span{color:#FFA7D5;}
+.stat-card[data-filter-rating="Нормально"]{background:#14121a;}
+.stat-card[data-filter-rating="Нормально"] b{color:var(--normal);text-shadow:none;}.stat-card[data-filter-rating="Нормально"] span{color:#D7D2DF;}
+.stat-card[data-filter-rating="Не понравилось"]{background:#14121a;}
+.stat-card[data-filter-rating="Не понравилось"] b{color:var(--dislike);text-shadow:none;}.stat-card[data-filter-rating="Не понравилось"] span{color:#FFAFB8;}
+.stat-card[data-filter-rating="Запланировано"]{background:#14121a;}
+.stat-card[data-filter-rating="Запланировано"] b{color:var(--planned);text-shadow:none;}.stat-card[data-filter-rating="Запланировано"] span{color:#A9C1FF;}
+.stat-card[data-filter-favorite="1"]{background:#14121a;}
+.stat-card[data-filter-favorite="1"] b{color:var(--favorite);text-shadow:none;}.stat-card[data-filter-favorite="1"] span{color:#FFE39A;}
+.stat-card.active{transform:translateY(-2px);filter:none;box-shadow:0 8px 22px rgba(0,0,0,.24),inset 0 0 0 1px rgba(255,255,255,.035);}
+.stat-card.active:hover{transform:translateY(-2px);filter:none;}
+.stat-card.total-card.active{border-color:var(--total);background:linear-gradient(180deg,rgba(103,232,249,.18),rgba(103,232,249,.06));box-shadow:0 8px 22px rgba(103,232,249,.12);}.stat-card.total-card.active b{color:#67E8F9;text-shadow:0 0 12px rgba(103,232,249,.52);}.stat-card.total-card.active span{color:#D9FBFF;text-shadow:0 0 8px rgba(217,251,255,.38);}
+.stat-card[data-filter-rating="Прохожу"].active{border-color:#A970FF;background:linear-gradient(180deg,rgba(169,112,255,.20),rgba(169,112,255,.07));box-shadow:0 8px 22px rgba(169,112,255,.12);}
+.stat-card[data-filter-rating="Прохожу"].active b{color:#A970FF;text-shadow:0 0 12px rgba(169,112,255,.60);}.stat-card[data-filter-rating="Прохожу"].active span{color:#DFC7FF;text-shadow:0 0 8px color-mix(in srgb,var(--progress) 28%,transparent);}
+.stat-card[data-filter-rating="Понравилось"].active{border-color:var(--like);background:linear-gradient(180deg,rgba(255,95,184,.20),rgba(255,95,184,.07));box-shadow:none;}
+.stat-card[data-filter-rating="Понравилось"].active b{color:#FF7FC6;text-shadow:0 0 12px rgba(255,95,184,.60);}.stat-card[data-filter-rating="Понравилось"].active span{color:#FFB8DB;text-shadow:0 0 8px rgba(255,184,219,.44);}
+.stat-card[data-filter-rating="Нормально"].active{border-color:var(--normal);background:linear-gradient(180deg,rgba(175,169,189,.15),rgba(175,169,189,.05));box-shadow:0 8px 20px rgba(175,169,189,.10);}
+.stat-card[data-filter-rating="Нормально"].active b{color:#CEC8D8;text-shadow:0 0 11px rgba(220,214,226,.46);}.stat-card[data-filter-rating="Нормально"].active span{color:#E9E4ED;text-shadow:0 0 8px rgba(238,233,241,.34);}
+.stat-card[data-filter-rating="Не понравилось"].active{border-color:var(--dislike);background:linear-gradient(180deg,rgba(255,95,109,.20),rgba(255,95,109,.07));box-shadow:0 8px 22px rgba(255,95,109,.12);}
+.stat-card[data-filter-rating="Не понравилось"].active b{color:#FF7C89;text-shadow:0 0 12px rgba(255,95,109,.60);}.stat-card[data-filter-rating="Не понравилось"].active span{color:#FFC0C7;text-shadow:0 0 8px rgba(255,176,184,.42);}
+.stat-card[data-filter-rating="Запланировано"].active{border-color:var(--planned);background:linear-gradient(180deg,rgba(91,140,255,.20),rgba(91,140,255,.07));box-shadow:0 8px 22px rgba(91,140,255,.12);}
+.stat-card[data-filter-rating="Запланировано"].active b{color:#80A6FF;text-shadow:0 0 12px rgba(91,140,255,.60);}.stat-card[data-filter-rating="Запланировано"].active span{color:#BCD0FF;text-shadow:0 0 8px rgba(188,208,255,.44);}
+.stat-card[data-filter-favorite="1"].active{border-color:var(--favorite);background:linear-gradient(180deg,rgba(255,201,77,.23),rgba(255,201,77,.075));box-shadow:0 8px 22px rgba(255,201,77,.13);}
+.stat-card[data-filter-favorite="1"].active b{color:#FFC94D;text-shadow:0 0 14px rgba(255,201,77,.78);}.stat-card[data-filter-favorite="1"].active span{color:#FFE9A8;text-shadow:0 0 9px rgba(255,233,168,.50);}
+.toolbar{display:grid;grid-template-columns:minmax(0,1fr) 150px 145px;gap:9px;margin-bottom:11px;align-items:stretch;}
+.search-wrap{position:relative;min-width:0;}.search-wrap #search{width:100%;height:42px;padding:10px 12px;}.toolbar > button,.toolbar > select{height:40px;min-height:40px;padding:0 10px;font-size:14px;line-height:1.4;}
+
+.list-nav{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;margin:7px 0 9px;padding:1px 0;border:0;border-radius:10px;background:transparent;box-sizing:border-box;min-height:32px;height:32px;}.stats{display:flex;align-items:center;gap:7px;min-width:0;color:var(--muted);font-size:12px;white-space:nowrap;}.stats b{font-size:14px;color:#eee8f2;}.nav-controls{display:contents;}.pagination{display:flex;justify-content:flex-end;align-items:center;justify-self:end;gap:4px;flex-wrap:wrap;margin-top:0;}.pageBtn{width:28px;height:28px;border:1px solid var(--border);background:var(--panel);color:#c9c1d2;border-radius:7px;padding:0;cursor:pointer;font:inherit;line-height:28px;text-align:center;}.pageBtn:hover:not(:disabled){border-color:#7440a0;color:#eee;}.pageBtn.active{border-color:#a855f7;background:#2a1737;color:#f3e8ff;box-shadow:0 0 0 1px rgba(168,85,247,.35) inset;}.pageBtn:disabled{opacity:.35;cursor:default;}
+.table-wrap{border:1px solid var(--border);border-radius:13px;overflow:hidden;background:#111015;box-shadow:0 12px 40px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.018),inset 0 0 0 1px rgba(0,0,0,.12);}
+table{width:100%;border-collapse:collapse;table-layout:fixed;}.game-col{width:auto;}.rating-col{width:190px;}.favorite-col{width:52px;}th,td{padding:10px 13px;border-bottom:1px solid #211e27;text-align:left;}th{font-size:12px;color:#aaa2b2;background:#15131a;font-weight:600;}tr:last-child td{border-bottom:0;}th.rating-head{text-align:center;}.rating-cell{text-align:center;}.rating-center{width:100%;display:flex;align-items:center;justify-content:center;}.rating-center .rating-select{display:block;width:max-content;max-width:100%;min-width:0;margin:0;padding-left:6px;padding-right:6px;text-align:center;text-align-last:center;}tbody td:nth-child(2),tbody td:nth-child(3),tbody td:nth-child(4){padding-left:10px;padding-right:10px;}tbody td:nth-child(3),tbody td:nth-child(4){text-align:center;}
+tbody tr{transition:background .14s;}tbody tr:hover td{background:#18151d;}
+td.title{position:relative;padding-left:13px;}.title input{width:100%;font-weight:500;font-size:16px;line-height:1.35;padding:7px 8px 7px 24px;background:transparent;border:0;border-radius:7px;color:#f3eef8;outline:none;}.title input:focus{background:#17141d;border:0;padding-left:24px;}.game-name{cursor:pointer;user-select:none;-webkit-user-select:none;}.game-name:hover{color:#fff;}
+tr.rating-liked .title::after,tr.rating-normal .title::after,tr.rating-disliked .title::after,tr.rating-planned .title::after,tr.rating-in-progress .title::after,tr.rating-favorite .title::after{content:"";position:absolute;left:13px;top:50%;width:10px;height:10px;transform:translateY(-50%);border-radius:50%;z-index:2;pointer-events:none;}
+tr.rating-liked .title::after{background:var(--like);box-shadow:0 0 9px rgba(255,95,184,.9);}tr.rating-normal .title::after{background:var(--normal);box-shadow:0 0 8px rgba(175,169,189,.6);}tr.rating-disliked .title::after{background:var(--dislike);box-shadow:0 0 9px rgba(255,95,109,.9);}tr.rating-planned .title::after{background:var(--planned);box-shadow:0 0 9px rgba(91,140,255,.9);}tr.rating-in-progress .title::after{background:var(--progress);box-shadow:0 0 9px rgba(169,112,255,.9);}
+tr.favorite-row .title::after{background:var(--favorite)!important;box-shadow:0 0 9px rgba(255,201,77,.95),0 0 16px rgba(255,201,77,.45)!important;}
+.rating-select{display:block;width:max-content;max-width:100%;min-width:0;margin-left:auto;margin-right:auto;padding:7px 6px;text-align:center;text-align-last:center;font-size:16px;line-height:1.35;background:transparent;border:0;border-radius:7px;font-weight:500;color:#CFC8D8;outline:none;appearance:auto;}.rating-select:hover{background:#17141d;}.rating-select:focus{background:#17141d;border:0;}.rating-select.rating-liked{color:var(--like);}.rating-select.rating-normal{color:var(--normal);}.rating-select.rating-disliked{color:var(--dislike);}.rating-select.rating-planned{color:var(--planned);}.rating-select.rating-in-progress{color:var(--progress);}.rating-select option{background:#16131b;color:#e9e2ee;}.rating-select option[value="Понравилось"]{color:#FF5FB8;}.rating-select option[value="Нормально"]{color:#AFA9BD;}.rating-select option[value="Не понравилось"]{color:#FF5F6D;}.rating-select option[value="Прохожу"]{color:#A970FF;}.rating-select option[value="Запланировано"]{color:#5B8CFF;}.modal-rating-select{height:40px;line-height:40px;font-size:14px;background:#121017;}.modal-rating-select:focus{background:#18131f;}
+.favorite-btn{width:34px;min-width:34px;height:34px;padding:0;border:0;background:transparent;color:#756d7e;font-size:20px;line-height:1;}.favorite-btn:hover{background:transparent;color:var(--favorite);transform:scale(1.08);}.favorite-btn.on{color:var(--favorite);text-shadow:0 0 10px rgba(255,201,77,.85);}
+tr.favorite-row td:nth-child(2){color:var(--favorite);}
+.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(5,4,8,.74);backdrop-filter:blur(7px);z-index:40;}.modal-backdrop.show{display:flex;}.modal{width:min(620px,100%);max-height:min(80vh,800px);overflow:auto;background:#15121c;border:1px solid #3a3045;border-radius:15px;box-shadow:0 25px 80px rgba(0,0,0,.55);padding:20px;}.modal h2{margin:0;font-size:20px;line-height:1.2;}.form{display:grid;gap:14px;}.form label{display:grid;gap:7px;color:#aaa2b2;font-size:12px;}.form input,.form select,.form textarea{width:100%;background:#121017;}.form input,.form select{height:42px;}.form input{padding:0 12px;}.form input:focus,.form select:focus,.form textarea:focus{border-color:#8b52b2;box-shadow:0 0 0 2px rgba(201,104,255,.12),0 0 14px rgba(168,85,247,.08);}.form-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid #2d2836;}.form-actions button{min-height:36px;border-radius:9px;padding:0 14px;transition:border-color .16s,background .16s,color .16s,box-shadow .16s,transform .16s;}.form-actions button:hover{transform:translateY(-1px);}.form-actions button:active{transform:translateY(0) scale(.985);}.form-actions button:focus-visible{outline:2px solid rgba(192,132,252,.55);outline-offset:2px;}.form-actions .primary{box-shadow:inset 0 0 0 1px rgba(192,132,252,.06);}.danger{border-color:#61313a!important;background:#28161a!important;color:#f0a5ad!important;}.dup-box{min-height:0;color:#9ea5b1;font-size:12px;}.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:16px;}.modal-head h2{margin:0;}.trash-subtitle{margin-top:5px;color:#8f8798;font-size:12px;}.icon-close{width:31px;height:31px;padding:0;border-radius:9px;}.icon-close:hover{border-color:#6a5279;background:#211b27;color:#f2eaf5;box-shadow:0 0 12px rgba(168,85,247,.10);}
+.add-game-modal{width:min(540px,100%);padding:18px;}.add-game-modal .modal-head{margin-bottom:15px;}.add-game-modal .trash-subtitle{color:#94899d;}.add-game-form{gap:12px;}.add-game-form label{gap:6px;}.add-game-form .field-hint{font-size:11px;color:#776f7e;margin-top:-1px;}.add-game-form .field-caption{display:flex;align-items:center;justify-content:space-between;gap:10px;}.add-game-form .field-caption span:last-child{color:#6f6675;font-size:11px;}
+.add-game-modal .form-actions{margin-top:0;padding-top:12px;}.add-game-modal .form-actions .primary{border-color:#7542a2;background:#21142b;color:#eadcf7;box-shadow:0 0 0 1px rgba(192,132,252,.06),0 0 10px rgba(168,85,247,.06);}.add-game-modal .form-actions .primary:hover{border-color:#9a5ec8;background:#281735;box-shadow:0 0 0 1px rgba(192,132,252,.08),0 0 14px rgba(201,104,255,.12);}
+
+.history-note{color:#aaa2b2;font-size:13px;line-height:1.5;margin:0 0 16px;padding:11px 12px;border:1px solid #2d2836;border-radius:10px;background:#111016;}.trash-item{padding:13px 14px;border:1px solid #302a39;border-radius:11px;background:linear-gradient(180deg,#19151f,#15131a);box-shadow:0 5px 16px rgba(0,0,0,.12);}.trash-list{display:grid;gap:9px;max-height:430px;overflow:auto;padding:2px;}.trash-item{display:flex;align-items:center;justify-content:space-between;gap:12px;}.trash-info{min-width:0;flex:1;}.trash-name{font-size:15px;font-weight:600;color:#eee8f2;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.trash-meta{margin-top:5px;font-size:12px;color:#8f8798;}.trash-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto;}.trash-actions button{height:34px;padding:0 11px;border-radius:9px;font-size:12px;white-space:nowrap;}.trash-actions button[data-restore-trash]{border-color:#4e3a5f;background:#211929;color:#d9c7e7;}.trash-actions button[data-restore-trash]:hover{border-color:#8250a8;color:#f0e7f5;}.trash-empty{color:var(--muted);padding:28px 8px;text-align:center;}.trash-empty{border:1px dashed #383142;border-radius:10px;background:#17141d;}.save{border:1px solid var(--border);background:var(--panel);border-radius:10px;color:#c9c1d2;white-space:nowrap;}.save.saved{border-color:#6b3e90;color:#eadbfa;}.save.error{border-color:#61313a;color:#f06472;}.data-actions button:disabled{opacity:.45;cursor:not-allowed;}
+/* v33.19 database check final polish */
+@media (max-width:1000px){.quick-stats{grid-template-columns:repeat(3,minmax(0,1fr));}.topline{align-items:flex-start;}}
+@media (max-width:560px){.trash-item{align-items:stretch;flex-direction:column;}.trash-actions{justify-content:stretch;}.trash-actions button{flex:1;}.quick-stats{grid-template-columns:1fr;}.toolbar{grid-template-columns:1fr;}.toolbar .search-wrap{grid-column:auto;}.data-actions button{font-size:11px;padding:7px 9px;}}
+@media (prefers-reduced-motion:reduce){h1,h1::before,h1::after{display:none!important;}}
+/* v33.89: строка заголовков таблицы удалена */
+/* --- extracted inline style block --- */
+/* Стек уведомлений */
+#toastStack{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  top:auto;
+  z-index:10000;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+  width:auto;
+  max-width:min(420px,calc(100vw - 40px));
+  pointer-events:none;
+}
+.toast-stack-item{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:max-content;
+  min-width:0;
+  max-width:min(420px,calc(100vw - 40px));
+  box-sizing:border-box;
+  padding:10px 15px;
+  border:1px solid rgba(167,139,250,.34);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(28,24,38,.97),rgba(20,18,28,.97));
+  color:#ece7f4;
+  box-shadow:
+    0 0 0 1px rgba(255,207,82,.22) inset,
+    0 0 24px rgba(255,207,82,.34),
+    0 8px 28px rgba(0,0,0,.34);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  font-size:13px;
+  font-weight:600;
+  line-height:1.35;
+  text-align:left;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  opacity:0;
+  transform:translateY(-8px);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.toast-stack-item.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.toast-stack-item.success{border-color:rgba(122,193,140,.42);}
+.toast-stack-item.info{border-color:rgba(103,232,249,.38);}
+.toast-stack-item.warning{border-color:rgba(255,201,77,.50);}
+.toast-stack-item.error{border-color:rgba(255,95,109,.52);}
+.toast-icon{width:20px;height:20px;flex:0 0 20px;display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;font-size:12px;font-weight:800;line-height:1;}
+.toast-stack-item.success .toast-icon{color:#7ac18c;background:rgba(122,193,140,.09);}
+.toast-stack-item.info .toast-icon{color:#67e8f9;background:rgba(103,232,249,.08);}
+.toast-stack-item.warning .toast-icon{color:#ffc94d;background:rgba(255,201,77,.09);}
+.toast-stack-item.error .toast-icon{color:#ff5f6d;background:rgba(255,95,109,.09);}
+.toast-text{min-width:0;}
+/* v1.42: notifications use a dedicated side rail when space allows.
+   When there is not enough free gutter, the stack becomes normal flow before the table,
+   so it never obscures table rows or pagination. */
+#toastStack{
+  position:fixed;
+  left:calc(50% + 555px);
+  right:auto;
+  bottom:24px;
+  z-index:50;
+  display:grid;
+  gap:10px;
+  width:min(320px,calc(100vw - 24px));
+  max-width:320px;
+  pointer-events:none;
+}
+#toastStack.toast-flow{
+  position:relative;
+  left:auto;
+  right:auto;
+  bottom:auto;
+  width:min(390px,100%);
+  max-width:390px;
+  margin:0 0 12px auto;
+}
+.toast-stack-item{
+  position:relative;
+  width:100%;
+  min-height:48px;
+  padding:12px 15px 12px 13px;
+  gap:12px;
+  border-radius:12px;
+  border:1px solid rgba(167,139,250,.24);
+  background:linear-gradient(180deg,rgba(24,21,32,.985),rgba(17,15,24,.985));
+  box-shadow:0 14px 34px rgba(0,0,0,.40),0 0 0 1px rgba(255,255,255,.018) inset;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  font-size:14px;
+  line-height:1.42;
+  font-weight:600;
+  letter-spacing:.01em;
+  opacity:0;
+  transform:translateY(8px) scale(.985);
+  transition:opacity .18s ease,transform .18s ease;
+}
+.toast-stack-item.show{opacity:1;transform:translateY(0) scale(1);}
+.toast-stack-item::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:9px;
+  bottom:9px;
+  width:3px;
+  border-radius:0 3px 3px 0;
+  background:currentColor;
+  opacity:.9;
+}
+.toast-stack-item.success{color:#9be7aa;border-color:rgba(122,193,140,.34);}
+.toast-stack-item.info{color:#8debf7;border-color:rgba(103,232,249,.30);}
+.toast-stack-item.warning{color:#ffd56f;border-color:rgba(255,201,77,.38);}
+.toast-stack-item.error{color:#ff8894;border-color:rgba(255,95,109,.42);}
+.toast-icon{
+  width:22px;height:22px;flex:0 0 22px;display:grid;place-items:center;
+  border:0;border-radius:7px;background:rgba(255,255,255,.035);
+  font-size:13px;font-weight:800;line-height:1;color:currentColor;
+}
+.toast-stack-item.success .toast-icon{background:rgba(122,193,140,.10);}
+.toast-stack-item.info .toast-icon{background:rgba(103,232,249,.09);}
+.toast-stack-item.warning .toast-icon{background:rgba(255,201,77,.10);}
+.toast-stack-item.error .toast-icon{background:rgba(255,95,109,.10);}
+.toast-text{min-width:0;color:#e9e4ee;overflow-wrap:anywhere;padding-right:2px;}
+@media (max-width:560px){
+  #toastStack{right:12px;bottom:12px;width:calc(100vw - 24px);max-width:calc(100vw - 24px);}
+  .toast-stack-item{min-height:46px;padding-right:12px;}
+}
+/* v1.40: unified confirmation dialog */
+.confirm-action-modal{width:min(520px,calc(100vw - 32px));}
+.confirm-heading{display:flex;align-items:center;gap:12px;min-width:0;}
+.confirm-action-icon{width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:12px;border:1px solid rgba(255,201,77,.42);background:rgba(255,201,77,.08);color:#ffc94d;font-weight:800;font-size:16px;}
+.confirm-action-modal .confirm-subtitle{margin-top:3px;color:#9890a2;font-size:12px;}
+.confirm-message{margin:18px 0 4px;color:#c9c2d0;line-height:1.55;}
+.confirm-action-modal .form-actions{margin-top:20px;}
+.confirm-action-modal #confirmAction.danger{border-color:rgba(255,95,109,.55);background:rgba(255,95,109,.11);color:#ff8792;}
+.confirm-action-modal #confirmAction.danger:hover{background:rgba(255,95,109,.17);}
+@media (max-width:560px){
+  #toastStack{
+    right:12px;
+    max-width:calc(100vw - 24px);
+  }
+  .toast-stack-item{
+    max-width:calc(100vw - 24px);
+  }
+}
+/* v1.7.7: управление прокруткой мышью и запрет выделения текста */
+/* v1.7.8: centered top actions */
+.topline{width:100%;justify-content:center;}
+.data-actions{width:100%;justify-content:center;}
+.data-core{justify-content:center;gap:16px;}
+/* v1.7.21: окончательное состояние интерфейса */
+/* 4 служебные кнопки остаются в строке списка, как раньше. */
+header{display:none!important;}
+.list-nav{grid-template-columns:auto minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important;margin-top:0!important;margin-bottom:9px!important;}
+.list-actions{display:flex!important;align-items:center!important;gap:10px!important;justify-self:start!important;min-width:0!important;white-space:nowrap!important;}
+.list-actions button{width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;padding:0!important;border-radius:9px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:0!important;position:relative!important;overflow:hidden!important;transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease,transform .12s ease!important;}
+.list-actions .action-label{display:none!important;}
+.list-actions .action-icon{font-size:15px!important;line-height:1!important;margin:0!important;display:grid!important;place-items:center!important;}
+.list-actions button:hover{transform:translateY(-1px)!important;}
+.list-actions button:active{transform:translateY(1px) scale(.94)!important;}
+/* Корзина: только пустой кружок; при наличии — светящаяся точка внутри. */
+.list-actions #trashData{border-color:rgba(174,76,91,.46)!important;background:rgba(255,95,109,.045)!important;color:#d98a95!important;box-shadow:inset 0 0 0 1px rgba(255,95,109,.025)!important;}
+.list-actions #trashData:hover{border-color:rgba(255,91,112,.84)!important;background:rgba(255,95,109,.105)!important;color:#ffadb7!important;box-shadow:0 0 16px rgba(255,95,109,.18)!important;}
+.list-actions #trashData.has-items{border-color:rgba(255,91,112,.72)!important;background:rgba(255,95,109,.075)!important;color:#ffadb7!important;box-shadow:0 0 0 1px rgba(255,95,109,.08) inset,0 0 13px rgba(255,102,117,.12)!important;}
+.trash-button-icon{width:12px!important;height:12px!important;border:1.5px solid currentColor!important;border-radius:50%!important;display:block!important;position:relative!important;box-sizing:border-box!important;}
+.trash-button-icon::after{content:"";position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:#FF5F6D;box-shadow:0 0 7px rgba(255,95,109,.95);transform:translate(-50%,-50%) scale(0);opacity:0;transition:transform .16s ease,opacity .16s ease;}
+.list-actions #trashData.has-items .trash-button-icon::after{transform:translate(-50%,-50%) scale(1);opacity:1;}
+/* Активный показатель светится, но не выглядит нажимающимся после загрузки. */
+.stat-card.active{transform:none!important;filter:none!important;}
+.stat-card.active:hover{transform:none!important;}
+.stat-card.total-card.active{border-color:var(--total)!important;background:linear-gradient(180deg,rgba(103,232,249,.18),rgba(103,232,249,.06))!important;box-shadow:0 8px 22px rgba(103,232,249,.15),inset 0 0 0 1px rgba(255,255,255,.035)!important;}
+.stat-card.total-card.active b{color:#67E8F9!important;text-shadow:0 0 12px rgba(103,232,249,.52)!important;}
+.stat-card.total-card.active span{color:#67E8F9!important;text-shadow:0 0 8px rgba(103,232,249,.38)!important;}
+html.app-loading .stat-card,.quick-stats.stat-init .stat-card{transition:none!important;animation:none!important;transform:none!important;filter:none!important;}
+@media (max-width:560px){
+  .list-actions{gap:8px!important;}
+  .list-actions button{width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;}
+  .list-nav{gap:8px!important;}
+}
+/* v1.7.22: стабильная активная статистика и кликовая анимация без ложного эффекта при загрузке */
+/* Не меняем расположение и оформление 4 компактных кнопок ниже поиска. */
+.list-nav{margin-bottom:12px!important;}
+/* У активных карточек не анимируем transform/filter при смене состояния: это исключает
+   ложное движение «Всего» во время первоначальной загрузки/перерисовки. */
+.stat-card{transition:border-color .16s ease,background .16s ease,box-shadow .16s ease,color .16s ease!important;}
+/* Реальное нажатие — отдельная внутренняя вспышка, чтобы оно работало и для уже активной карточки. */
+.stat-card::after{content:"";position:absolute;inset:1px;border-radius:12px;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 45%,rgba(255,255,255,.14),rgba(255,255,255,0) 68%);transform:scale(.96);transform-origin:center;}
+/* При начальной загрузке никакого перехода/вспышки: только финальное состояние карточки. */
+html.app-loading .stat-card,.quick-stats.stat-init .stat-card{transition:none!important;}
+.quick-stats.stat-init .stat-card::after{animation:none!important;opacity:0!important;}
+/* v1.7.73: toolbar control alignment baseline */
+
+.toolbar .resetFilters{
+  height:32px;
+  min-height:32px;
+  box-sizing:border-box;
+  border-radius:10px;
+  font:inherit;
+  line-height:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:border-color .16s,background .16s,color .16s,box-shadow .16s,transform .16s;
+}
+
+
+
+
+.toolbar .resetFilters:focus-visible{outline:2px solid rgba(192,132,252,.55);outline-offset:2px;}
+.toolbar .resetFilters{
+  width:32px;
+  min-width:32px;
+  max-width:32px;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(157,150,168,.48);
+  background:#15131a;
+  color:#bcb4c7;
+  font-size:18px;
+  font-weight:500;
+}
+.toolbar .resetFilters:hover{
+  border-color:#9d96a8;
+  background:#24202a;
+  color:#eee8f3;
+  box-shadow:0 0 0 1px rgba(157,150,168,.08),0 0 14px rgba(157,150,168,.14);
+  transform:translateY(-1px);
+}
+.toolbar .resetFilters:active{transform:translateY(1px) scale(.94);}
+@media (max-width:700px){
+  .toolbar{grid-template-columns:minmax(0,1fr) max-content max-content;}
+}
+@media (max-width:560px){
+  .toolbar{grid-template-columns:1fr max-content max-content;}
+}
+/* v1.7.78: unified controls, spacing and press feedback. */
+:root{
+  --control-h:32px;
+  --control-radius:10px;
+  --control-border:rgba(157,150,168,.48);
+  --control-bg:#15131a;
+  --control-text:#bcb4c7;
+  --control-border-hover:#9d96a8;
+  --control-bg-hover:#24202a;
+  --control-text-hover:#eee8f3;
+}
+/* Main visual rhythm: the vertical distance between primary blocks is always 12px. */
+.stats-panel{margin:0 0 12px!important;}
+.toolbar{margin-bottom:12px!important;align-items:center!important;}
+.list-nav{height:var(--control-h)!important;min-height:var(--control-h)!important;margin-top:0!important;margin-bottom:12px!important;align-items:center!important;gap:10px!important;}
+/* One control geometry for the list/action row. */
+.list-actions{height:var(--control-h)!important;min-height:var(--control-h)!important;display:flex!important;align-items:center!important;gap:10px!important;}
+.list-actions button{
+  width:var(--control-h)!important;
+  min-width:var(--control-h)!important;
+  height:var(--control-h)!important;
+  min-height:var(--control-h)!important;
+  padding:0!important;
+  border-radius:var(--control-radius)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+}
+/* Pagination inherits the exact visual language of the reset button. */
+.nav-controls{height:var(--control-h)!important;min-height:var(--control-h)!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;}
+.pagination{height:var(--control-h)!important;min-height:var(--control-h)!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;margin:0!important;}
+.pagination .pageBtn{
+  contain:paint!important;
+  height:var(--control-h)!important;
+  min-height:var(--control-h)!important;
+  box-sizing:border-box!important;
+  border:1px solid var(--control-border)!important;
+  border-radius:var(--control-radius)!important;
+  background:var(--control-bg)!important;
+  color:var(--control-text)!important;
+  box-shadow:none!important;
+  font-weight:500!important;
+  line-height:1!important;
+  transform:none!important;
+  transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease,transform .12s ease!important;
+}
+.pagination .pageBtn{
+  width:var(--control-h)!important;
+  min-width:var(--control-h)!important;
+  padding:0!important;
+}
+
+.pagination .pageBtn:hover:not(:disabled){
+  border-color:var(--control-border-hover)!important;
+  background:var(--control-bg-hover)!important;
+  color:var(--control-text-hover)!important;
+  box-shadow:0 0 0 1px rgba(157,150,168,.08),0 0 14px rgba(157,150,168,.14)!important;
+  transform:translateY(-1px)!important;
+}
+.pagination .pageBtn:active:not(:disabled),.list-actions button:active:not(:disabled),.stat-card:active:not(:disabled){
+  transform:translateY(1px) scale(.94)!important;
+}
+.pagination .pageBtn .pageIcon{
+  display:flex!important;width:100%!important;height:100%!important;align-items:center!important;justify-content:center!important;
+  line-height:1!important;padding:0!important;margin:0!important;font-family:inherit!important;font-weight:600!important;transform:none!important;
+}
+.pagination .pageIndicator{
+  height:var(--control-h)!important;
+  min-height:var(--control-h)!important;
+  min-width:70px!important;
+  padding:0 10px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  box-sizing:border-box!important;
+  border:1px solid var(--control-border)!important;
+  border-radius:var(--control-radius)!important;
+  background:var(--control-bg)!important;
+  color:var(--control-text)!important;
+  font-size:13px!important;
+  line-height:1!important;
+  font-variant-numeric:tabular-nums!important;
+  white-space:nowrap!important;
+}
+.pagination .pageCurrent{color:#eee8f3!important;font-weight:700!important;}
+.pagination .pageSeparator{color:#8f8798!important;}
+.pagination .pageTotal{color:#bcb4c7!important;}
+.pagination .pageFirst,.pagination .pageLast{font-size:15px!important;color:var(--control-text)!important;}
+/* Statistic cards keep their own semantic colors; pressing them uses the same physical response as reset. */
+.stat-card:active:not(:disabled){filter:none!important;}
+/* Typography contract. */
+body{font-family:"Inter",sans-serif;}
+button,input,select,textarea{font-family:inherit;}
+pre,code,kbd,samp,.technical,.technical-data,[data-technical="true"]{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;}
+@media (max-width:700px){
+  .list-nav{height:auto!important;min-height:var(--control-h)!important;row-gap:12px!important;}
+  .list-actions,.nav-controls,.pagination{height:var(--control-h)!important;min-height:var(--control-h)!important;}
+  .list-actions{gap:10px!important;}
+  .pagination{gap:10px!important;}
+}
+@media (max-width:560px){
+  .toolbar{row-gap:12px!important;}
+  .list-actions{gap:10px!important;}
+  .list-actions button{width:var(--control-h)!important;min-width:var(--control-h)!important;height:var(--control-h)!important;min-height:var(--control-h)!important;}
+  .pagination{gap:8px!important;}
+  .pagination .pageBtn{width:var(--control-h)!important;min-width:var(--control-h)!important;height:var(--control-h)!important;min-height:var(--control-h)!important;}
+  .pagination .pageIndicator{height:var(--control-h)!important;min-height:var(--control-h)!important;min-width:66px!important;}
+}
+/* v1.7.80: final visual alignment. */
+:root{--control-h:32px;--toolbar-control-h:42px;--control-press:cubic-bezier(.22,.61,.36,1);}
+.toolbar .resetFilters{
+  height:var(--toolbar-control-h)!important;min-height:var(--toolbar-control-h)!important;
+  box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  line-height:1!important;
+  transition:transform .22s var(--control-press),border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease!important;
+}
+
+
+
+.toolbar .resetFilters:hover:not(:disabled){
+  border-color:var(--control-border-hover)!important;background:var(--control-bg-hover)!important;color:var(--control-text-hover)!important;
+  box-shadow:0 0 0 1px rgba(157,150,168,.08),0 0 14px rgba(157,150,168,.14)!important;transform:translateY(-1px)!important;
+}
+.toolbar .resetFilters:active:not(:disabled){transform:translateY(1px) scale(.97)!important;}
+.pagination .pageBtn{
+  width:var(--control-h)!important;min-width:var(--control-h)!important;height:var(--control-h)!important;min-height:var(--control-h)!important;
+  padding:0!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;
+  border:1px solid var(--control-border)!important;border-radius:var(--control-radius)!important;
+  background:var(--control-bg)!important;color:var(--control-text)!important;box-shadow:none!important;
+}
+.pagination .pageBtn:hover:not(:disabled){
+  border-color:var(--control-border-hover)!important;background:var(--control-bg-hover)!important;color:var(--control-text-hover)!important;
+  box-shadow:0 0 0 1px rgba(157,150,168,.08),0 0 14px rgba(157,150,168,.14)!important;transform:translateY(-1px)!important;
+}
+.pagination .pageBtn:active:not(:disabled){transform:translateY(1px) scale(.97)!important;}
+.pagination .pageBtn:disabled{opacity:.35!important;box-shadow:none!important;transform:none!important;}
+.pagination .pageBtn .pageIcon{
+  display:inline-flex!important;width:100%!important;height:100%!important;align-items:center!important;justify-content:center!important;
+  text-align:center!important;vertical-align:middle!important;line-height:1!important;padding:0!important;margin:0!important;
+  font-family:inherit!important;font-weight:600!important;transform:none!important;
+}
+.pagination .pageIndicator{height:var(--control-h)!important;min-height:var(--control-h)!important;}
+button:active:not(:disabled),.stat-card:active:not(:disabled),.pageBtn:active:not(:disabled),.toolbar .resetFilters:active:not(:disabled),.list-actions button:active:not(:disabled){
+  transform:translateY(1px) scale(.97)!important;
+}
+tbody tr{transition:background-color .18s ease,filter .18s ease,box-shadow .18s ease!important;}
+tbody tr:active td{
+  background-color:rgba(255,255,255,.025)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(0,0,0,.18)!important;
+}
+.rating-select:focus,.rating-select:focus-visible,.rating-select:active{
+  background:transparent!important;border-color:transparent!important;outline:none!important;box-shadow:none!important;
+}
+.rating-select option:checked,.rating-select option:focus{background:#16131b!important;}
+/* v1.7.81: unified compact controls + smooth press feedback */
+:root{
+  --control-h:32px;
+  --control-radius:9px;
+  --control-press:cubic-bezier(.22,.61,.36,1);
+  --control-press-duration:.20s;
+}
+.toolbar .resetFilters{
+  width:32px!important;
+  min-width:32px!important;
+  max-width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0!important;
+  border-radius:var(--control-radius)!important;
+}
+
+
+
+
+/* The pagination/action controls share the same compact button geometry. */
+.list-actions button,.pagination .pageBtn{
+  width:32px!important;
+  min-width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0!important;
+  border-radius:var(--control-radius)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+}
+.pagination .pageBtn .pageIcon{
+  display:inline-flex!important;
+  width:100%!important;
+  height:100%!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1!important;
+  padding:0!important;
+  margin:0!important;
+  transform:none!important;
+}
+/* Smooth, shared press response. */
+button,.stat-card,.pagination .pageBtn,.toolbar .resetFilters,.list-actions button{
+  transition:
+    transform var(--control-press-duration) var(--control-press),
+    border-color .18s ease,
+    background-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease!important;
+}
+button:active:not(:disabled),.stat-card:active:not(:disabled),.pagination .pageBtn:active:not(:disabled),.toolbar .resetFilters:active:not(:disabled),.list-actions button:active:not(:disabled){
+  transform:translateY(1px) scale(.98)!important;
+}
+/* Visible animated press feedback for table rows. */
+tbody tr td{
+  transition:
+    background-color .20s ease,
+    box-shadow .20s ease,
+    color .20s ease,
+    transform .20s var(--control-press)!important;
+}
+tbody tr:active td{
+  background-color:rgba(255,255,255,.055)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    inset 0 -1px 0 rgba(0,0,0,.24)!important;
+  transform:translateY(1px)!important;
+}
+tbody tr:active .titleText,tbody tr:active .pill{
+  filter:brightness(1.08)!important;
+}
+/* v1.7.82: final button geometry + rating-aware table interaction */
+:root{
+  --toolbar-control-h:42px;
+  --control-press:cubic-bezier(.22,.61,.36,1);
+  --control-press-duration:.28s;
+  --row-liked:rgba(255,95,184,.13);
+  --row-normal:rgba(175,169,189,.11);
+  --row-disliked:rgba(255,95,109,.13);
+  --row-planned:rgba(91,140,255,.13);
+  --row-progress:rgba(184,108,255,.13);
+  --row-neutral:rgba(255,255,255,.035);
+}
+/* Reset is square, but as tall as the search input. */
+.toolbar .resetFilters{
+  width:42px!important;
+  min-width:42px!important;
+  max-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+/* A–Я keeps the earlier spacing and matches the search-row height. */
+
+
+
+
+/* Every click animation starts gently and settles gently. */
+.toolbar .resetFilters,.pagination .pageBtn,.list-actions button,button,.stat-card{
+  transition:
+    transform var(--control-press-duration) var(--control-press),
+    border-color .20s ease,
+    background-color .20s ease,
+    color .20s ease,
+    box-shadow .20s ease,
+    filter .20s ease!important;
+}
+.toolbar .resetFilters:active:not(:disabled),.pagination .pageBtn:active:not(:disabled),.list-actions button:active:not(:disabled),button:active:not(:disabled),.stat-card:active:not(:disabled){
+  transform:translateY(1px) scale(.98)!important;
+}
+/* Rating-aware table hover. */
+tbody tr.rating-liked:hover td{background-color:var(--row-liked)!important;}
+tbody tr.rating-normal:hover td{background-color:var(--row-normal)!important;}
+tbody tr.rating-disliked:hover td{background-color:var(--row-disliked)!important;}
+tbody tr.rating-planned:hover td{background-color:var(--row-planned)!important;}
+tbody tr.rating-in-progress:hover td{background-color:var(--row-progress)!important;}
+tbody tr.favorite-row:hover td{background-color:rgba(255,201,77,.12)!important;}
+tbody tr:not(.rating-liked):not(.rating-normal):not(.rating-disliked):not(.rating-planned):not(.rating-in-progress):not(.favorite-row):hover td{background-color:var(--row-neutral)!important;}
+/* Pressed row: no scale/translate. A short colored light sweep replaces it. */
+tbody tr td{
+  position:relative;
+  overflow:hidden;
+  transition:background-color .18s ease!important;
+}
+/* v1.7.84: aligned table toolbar + slower rating-aware row shine */
+.list-nav{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  row-gap:0!important;
+  min-height:32px!important;
+  height:32px!important;
+  margin-top:0!important;
+  margin-bottom:12px!important;
+  padding:0!important;
+}
+.list-actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  height:32px!important;
+  min-height:32px!important;
+}
+.nav-controls{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  height:32px!important;
+  min-height:32px!important;
+  margin:0!important;
+}
+.pagination{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  height:32px!important;
+  min-height:32px!important;
+  margin:0!important;
+  gap:10px!important;
+}
+/* v1.7.85: definitive table interaction cleanup. */
+/* Rows no longer have a press transform/brightness effect; only the rating-aware shine is shown. */
+tbody tr:active td,tbody tr:active .titleText,tbody tr:active .pill{
+  background-color:inherit!important;
+  box-shadow:none!important;
+  filter:none!important;
+  transform:none!important;
+}
+/* Keep row controls above table backgrounds, but let the title-cell shine pass across the full row. */
+tbody tr td:nth-child(2),tbody tr td:nth-child(3),tbody tr td:nth-child(4){position:relative!important;z-index:1!important;background-clip:padding-box!important;}
+.favorite-btn,.rating-center,.rating-select{position:relative;z-index:1;}
+/* v1.7.86: unified typography + reliable table shine + soft stat press */
+:root{--ui-font-size:14px;--ui-press-duration:.30s;--ui-press-ease:cubic-bezier(.22,.61,.36,1);}
+body{font-size:var(--ui-font-size)!important;}
+button,input,select,textarea{font-size:var(--ui-font-size)!important;}
+/* Keep visual hierarchy, but remove the accidental small text variants from the main app chrome. */
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.pagination,.pagination .pageBtn,.pageIndicator,.stats,.stats b,.data-actions,.data-actions button,.countLabel,.countTotal{font-size:var(--ui-font-size)!important;}
+/* Soft, common press response for controls. */
+button:active:not(:disabled),.stat-card:active:not(:disabled),.pagination .pageBtn:active:not(:disabled),.toolbar .resetFilters:active:not(:disabled),.list-actions button:active:not(:disabled){
+  transform:translateY(1px) scale(.985)!important;
+  transition:transform var(--ui-press-duration) var(--ui-press-ease)!important;
+}
+/* Delete control: larger transparent X with no button surface. */
+
+
+
+/* v1.7.87: 17px interface typography, neutral statistic hover, reliable row shine. */
+:root{--ui-font-size:17px;--ui-press-duration:.30s;--ui-press-ease:cubic-bezier(.22,.61,.36,1);}
+body,body :where(p,span,label,button,input,select,textarea,a,td,th,small,strong,b,summary,legend,h1,h2,h3,h4,h5,h6){font-size:17px!important;}
+button,input,select,textarea{font-size:17px!important;}
+code,pre,kbd,samp,.technical,.technical-data,[data-technical="true"]{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace!important;font-size:17px!important;}
+.stat-card:hover:not(:disabled){transform:translateY(-1px)!important;filter:none!important;border-color:#5e3c78!important;background:#1b1722!important;color:#eee!important;box-shadow:0 5px 14px rgba(168,85,247,.16)!important;}
+#tableWrap{position:relative!important;overflow:hidden!important;}
+/* v1.7.87: disable legacy row press visuals; shine is the only row-click effect. */
+tbody tr:active td,tbody tr:active .titleText,tbody tr:active .pill{transform:none!important;filter:none!important;}
+tbody tr.row-pressed{transform:none!important;filter:none!important;box-shadow:none!important;}
+@keyframes statReclick{0%{transform:translateY(-1px) scale(1)}45%{transform:translateY(1px) scale(.985)}100%{transform:translateY(-1px) scale(1)}}
+/* v1.7.89: final typography/stat behavior and isolated table shine. */
+:root{--ui-font-size:15px;--ui-press-duration:.30s;--ui-press-ease:cubic-bezier(.22,.61,.36,1);}
+body,body :where(p,span,label,button,input,select,textarea,a,td,th,small,strong,b,summary,legend,h1,h2,h3,h4,h5,h6){font-size:15px!important;}
+button,input,select,textarea{font-size:15px!important;}
+code,pre,kbd,samp,.technical,.technical-data,[data-technical="true"]{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace!important;font-size:15px!important;}
+/* Restore the previous statistic-card hover and soft press behavior. */
+.stat-card:hover:not(:disabled){transform:translateY(-1px)!important;filter:brightness(1.08)!important;border-color:#4a4252!important;background:inherit!important;box-shadow:0 6px 16px rgba(0,0,0,.18)!important;}
+.stat-card:active:not(:disabled){transform:translateY(1px) scale(.985)!important;filter:none!important;}
+.stat-card{transition:transform var(--ui-press-duration) var(--ui-press-ease),border-color .18s ease,background-color .18s ease,box-shadow .18s ease,filter .18s ease!important;}
+/* Isolated JS shine layer: no legacy animation/opacity rules apply. */
+/* v1.7.89: button typography, rating-inherited row shine, aligned table controls. */
+:root{--ui-font-size:15px;}
+button{font-size:15px!important;}
+.toolbar button,.list-actions button,.data-actions button,.pagination .pageBtn,.form-actions button,.smallBtn,.resetFilters{font-size:15px!important;}
+.favorite-btn{height:34px!important;min-height:34px!important;box-sizing:border-box!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;vertical-align:middle!important;padding:0!important;line-height:1!important;}
+.favorite-btn{width:34px!important;min-width:34px!important;font-size:20px!important;}
+
+.rating-center .rating-select{height:34px!important;min-height:34px!important;box-sizing:border-box!important;line-height:20px!important;}
+
+/* v1.7.90: typography and table row alignment refresh. */
+body{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif!important;}
+button,input,select,textarea{font-family:inherit!important;}
+.stat-card b{font-size:22px!important;line-height:1.1!important;font-weight:700!important;}
+.stat-card span{font-size:12px!important;line-height:1.2!important;}
+/* Table typography: all textual controls use a single 16px size. */
+table,table th,table td,.game-name,.rating-select{font-size:16px!important;}
+/* Table rows: one shared vertical alignment contract. */
+tbody tr>td{vertical-align:middle!important;}
+.title{vertical-align:middle!important;}
+.title .game-name{height:34px!important;min-height:34px!important;display:flex!important;align-items:center!important;box-sizing:border-box!important;line-height:1.2!important;}
+.rating-center{height:34px!important;min-height:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+.rating-center .rating-select{height:34px!important;min-height:34px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1.2!important;text-align:center!important;text-align-last:center!important;}
+.favorite-btn{height:34px!important;min-height:34px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;vertical-align:middle!important;line-height:1!important;}
+.favorite-btn{font-size:20px!important;}
+
+/* v1.7.91: table row height fitted to 16px text and rating control. */
+tbody tr>td{vertical-align:middle!important;padding-top:8px!important;padding-bottom:8px!important;}
+.title .game-name{height:38px!important;min-height:38px!important;line-height:1.2!important;display:flex!important;align-items:center!important;}
+.rating-center{height:38px!important;min-height:38px!important;align-items:center!important;}
+.rating-center .rating-select{height:38px!important;min-height:38px!important;line-height:1.2!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;}
+.favorite-btn{height:38px!important;min-height:38px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;}
+/* v1.7.92: semantic hover borders for inactive statistics. */
+/* v1.7.93: restore previous statistic hover colors and remove rating dropdown arrow. */
+.rating-center .rating-select{appearance:none!important;-webkit-appearance:none!important;background-image:none!important;padding-left:10px!important;padding-right:10px!important;text-align:center!important;text-align-last:center!important;}
+.rating-cell,.rating-center{vertical-align:middle!important;text-align:center!important;}
+.rating-cell .rating-center{margin:0 auto!important;}
+/* v1.7.95: visual typography tuning */
+.pagination .pageBtn{font-size:12px!important;}
+.pagination .pageIndicator{font-size:12px!important;}
+#search{font-size:14px!important;}
+/* v1.7.95: restore original statistics color behavior */
+.stat-card:not(.active){border-color:var(--border)!important;box-shadow:none!important;}
+.stat-card:not(.active):hover{transform:translateY(-1px)!important;filter:brightness(1.08)!important;border-color:#4a4252!important;background:#14121a!important;box-shadow:0 6px 16px rgba(0,0,0,.18)!important;}
+.stat-card.total-card:not(.active):hover,.stat-card[data-filter-rating="Прохожу"]:not(.active):hover,.stat-card[data-filter-rating="Понравилось"]:not(.active):hover,.stat-card[data-filter-rating="Нормально"]:not(.active):hover,.stat-card[data-filter-rating="Не понравилось"]:not(.active):hover,.stat-card[data-filter-rating="Запланировано"]:not(.active):hover,.stat-card[data-filter-favorite="1"]:not(.active):hover{border-color:#4a4252!important;}
+.stat-card.total-card{background:#14121a!important;}.stat-card[data-filter-rating="Прохожу"]{background:#14121a!important;}.stat-card[data-filter-rating="Понравилось"]{background:#14121a!important;}.stat-card[data-filter-rating="Нормально"]{background:#14121a!important;}.stat-card[data-filter-rating="Не понравилось"]{background:#14121a!important;}.stat-card[data-filter-rating="Запланировано"]{background:#14121a!important;}.stat-card[data-filter-favorite="1"]{background:#14121a!important;}
+.stat-card.total-card b{color:var(--total)!important;text-shadow:none!important;}.stat-card.total-card span{color:#ffb0d5!important;}
+.stat-card[data-filter-rating="Прохожу"] b{color:#A970FF!important;text-shadow:none!important;}.stat-card[data-filter-rating="Прохожу"] span{color:#D2B6FF!important;}
+.stat-card[data-filter-rating="Понравилось"] b{color:var(--like)!important;text-shadow:none!important;}.stat-card[data-filter-rating="Понравилось"] span{color:#FFA7D5!important;}
+.stat-card[data-filter-rating="Нормально"] b{color:var(--normal)!important;text-shadow:none!important;}.stat-card[data-filter-rating="Нормально"] span{color:#D7D2DF!important;}
+.stat-card[data-filter-rating="Не понравилось"] b{color:var(--dislike)!important;text-shadow:none!important;}.stat-card[data-filter-rating="Не понравилось"] span{color:#FFAFB8!important;}
+.stat-card[data-filter-rating="Запланировано"] b{color:var(--planned)!important;text-shadow:none!important;}.stat-card[data-filter-rating="Запланировано"] span{color:#A9C1FF!important;}
+.stat-card[data-filter-favorite="1"] b{color:var(--favorite)!important;text-shadow:none!important;}.stat-card[data-filter-favorite="1"] span{color:#FFE39A!important;}
+.stat-card.total-card.active{border-color:var(--total)!important;background:linear-gradient(180deg,rgba(103,232,249,.18),rgba(103,232,249,.06))!important;box-shadow:0 8px 22px rgba(103,232,249,.12)!important;}.stat-card.total-card.active b{color:#67E8F9!important;text-shadow:0 0 12px rgba(103,232,249,.52)!important;}.stat-card[data-filter-rating="Прохожу"].active{border-color:#A970FF!important;background:linear-gradient(180deg,rgba(169,112,255,.20),rgba(169,112,255,.07))!important;box-shadow:0 8px 22px rgba(169,112,255,.12)!important;}.stat-card[data-filter-rating="Прохожу"].active b{color:#A970FF!important;text-shadow:0 0 12px rgba(169,112,255,.60)!important;}.stat-card[data-filter-rating="Прохожу"].active span{color:#DFC7FF!important;text-shadow:0 0 8px color-mix(in srgb,var(--progress) 28%,transparent)!important;}
+.stat-card[data-filter-rating="Понравилось"].active{border-color:var(--like)!important;background:linear-gradient(180deg,rgba(255,95,184,.20),rgba(255,95,184,.07))!important;}.stat-card[data-filter-rating="Понравилось"].active b{color:#FF7FC6!important;text-shadow:0 0 12px rgba(255,95,184,.60)!important;}.stat-card[data-filter-rating="Понравилось"].active span{color:#FFB8DB!important;text-shadow:0 0 8px rgba(255,184,219,.44)!important;}
+.stat-card[data-filter-rating="Нормально"].active{border-color:var(--normal)!important;background:linear-gradient(180deg,rgba(175,169,189,.15),rgba(175,169,189,.05))!important;box-shadow:0 8px 20px rgba(175,169,189,.10)!important;}.stat-card[data-filter-rating="Нормально"].active b{color:#CEC8D8!important;text-shadow:0 0 11px rgba(220,214,226,.46)!important;}.stat-card[data-filter-rating="Нормально"].active span{color:#E9E4ED!important;text-shadow:0 0 8px rgba(238,233,241,.34)!important;}
+.stat-card[data-filter-rating="Не понравилось"].active{border-color:var(--dislike)!important;background:linear-gradient(180deg,rgba(255,95,109,.20),rgba(255,95,109,.07))!important;box-shadow:0 8px 22px rgba(255,95,109,.12)!important;}.stat-card[data-filter-rating="Не понравилось"].active b{color:#FF7C89!important;text-shadow:0 0 12px rgba(255,95,109,.60)!important;}.stat-card[data-filter-rating="Не понравилось"].active span{color:#FFC0C7!important;text-shadow:0 0 8px rgba(255,176,184,.42)!important;}
+.stat-card[data-filter-rating="Запланировано"].active{border-color:var(--planned)!important;background:linear-gradient(180deg,rgba(91,140,255,.20),rgba(91,140,255,.07))!important;box-shadow:0 8px 22px rgba(91,140,255,.12)!important;}.stat-card[data-filter-rating="Запланировано"].active b{color:#80A6FF!important;text-shadow:0 0 12px rgba(91,140,255,.60)!important;}.stat-card[data-filter-rating="Запланировано"].active span{color:#BCD0FF!important;text-shadow:0 0 8px rgba(188,208,255,.44)!important;}
+.stat-card[data-filter-favorite="1"].active{border-color:var(--favorite)!important;background:linear-gradient(180deg,rgba(255,201,77,.23),rgba(255,201,77,.075))!important;box-shadow:0 8px 22px rgba(255,201,77,.13)!important;}.stat-card[data-filter-favorite="1"].active b{color:#FFC94D!important;text-shadow:0 0 14px rgba(255,201,77,.78)!important;}.stat-card[data-filter-favorite="1"].active span{color:#FFE9A8!important;text-shadow:0 0 9px rgba(255,233,168,.50)!important;}
+/* v1.7.95: small typography refinement */
+/* v1.7.96: search field fills all remaining toolbar space. */
+.toolbar{grid-template-columns:minmax(0,1fr) max-content max-content!important;}
+.toolbar .search-wrap{min-width:0!important;width:100%!important;}
+/* v1.7.96: rating select stays visually neutral on hover/focus. */
+.rating-center .rating-select:hover,.rating-center .rating-select:focus,.rating-center .rating-select:focus-visible,.rating-center .rating-select:active{background:transparent!important;border-color:transparent!important;outline:none!important;box-shadow:none!important;}
+/* v1.7.96: pagination and search typography refinement. */
+.pagination .pageBtn,.pagination .pageIndicator{font-size:11px!important;}
+#search{font-size:13px!important;}
+/* v1.7.96: restore the original v1.7.27 statistic colour behavior. */
+.stat-card:hover{transform:translateY(-1px)!important;filter:none!important;}
+.stat-card.total-card:hover{border-color:#67E8F9!important;box-shadow:0 0 22px rgba(103,232,249,.28)!important;}
+.stat-card[data-filter-rating="Прохожу"]:hover{border-color:#A970FF!important;box-shadow:0 0 22px rgba(169,112,255,.27)!important;}
+.stat-card[data-filter-rating="Понравилось"]:hover{border-color:#FF74C5!important;box-shadow:0 0 22px rgba(224,112,255,.28)!important;}
+.stat-card[data-filter-rating="Нормально"]:hover{border-color:#CFC8D8!important;box-shadow:0 0 20px rgba(217,210,223,.15)!important;}
+.stat-card[data-filter-rating="Не понравилось"]:hover{border-color:#FF5F6D!important;box-shadow:0 0 22px rgba(255,91,112,.27)!important;}
+.stat-card[data-filter-rating="Запланировано"]:hover{border-color:#5B8CFF!important;box-shadow:0 0 22px rgba(103,152,255,.27)!important;}
+.stat-card[data-filter-favorite="1"]:hover{border-color:#FFC94D!important;box-shadow:0 0 28px rgba(255,201,77,.34)!important;}
+.stat-card.total-card.active{border-color:var(--total)!important;background:linear-gradient(180deg,rgba(103,232,249,.18),rgba(103,232,249,.06))!important;box-shadow:0 8px 22px rgba(103,232,249,.15),inset 0 0 0 1px rgba(255,255,255,.035)!important;}
+/* v1.7.99: tighten sort control and center pagination arrows. */
+
+.pagination .pageBtn .pageIcon{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;line-height:1!important;transform:none!important;}
+.pagination .pageBtn{font-size:10px!important;}
+.pagination .pageBtn .pageIcon{font-size:10px!important;}
+.pagination .pageIndicator{font-size:10px!important;}
+/* v1.8.0: restore statistic colors, stable pagination typography, and improve add-game controls. */
+/* Statistics: restore the original v1.7.27 semantic hover behavior. */
+.stat-card.total-card:not(.active):hover{border-color:#67E8F9!important;box-shadow:0 0 22px rgba(103,232,249,.28)!important;}
+.stat-card[data-filter-rating="Прохожу"]:not(.active):hover{border-color:#A970FF!important;box-shadow:0 0 22px rgba(169,112,255,.27)!important;}
+.stat-card[data-filter-rating="Понравилось"]:not(.active):hover{border-color:#FF74C5!important;box-shadow:0 0 22px rgba(224,112,255,.28)!important;}
+.stat-card[data-filter-rating="Нормально"]:not(.active):hover{border-color:#CFC8D8!important;box-shadow:0 0 20px rgba(217,210,223,.15)!important;}
+.stat-card[data-filter-rating="Не понравилось"]:not(.active):hover{border-color:#FF5F6D!important;box-shadow:0 0 22px rgba(255,91,112,.27)!important;}
+.stat-card[data-filter-rating="Запланировано"]:not(.active):hover{border-color:#5B8CFF!important;box-shadow:0 0 22px rgba(103,152,255,.27)!important;}
+.stat-card[data-filter-favorite="1"]:not(.active):hover{border-color:#FFC94D!important;box-shadow:0 0 28px rgba(255,201,77,.34)!important;}
+/* Pagination: arrows stay large and centered; page text uses one explicit size. */
+.pagination .pageBtn .pageIcon{font-size:18px!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;line-height:1!important;padding:0!important;margin:0!important;transform:none!important;}
+.pagination .pageIndicator,.pagination .pageCurrent,.pagination .pageSeparator,.pagination .pageTotal{font-size:12px!important;line-height:1!important;}
+/* Search keeps all remaining toolbar width. */
+/* Add-game form: compact favorite row, clearer rating control. */
+.add-game-form .modal-rating-select,.bulk-modal .modal-rating-select{border:1px solid #3a3045!important;border-radius:9px!important;background:#17141d!important;height:40px!important;min-height:40px!important;padding:0 12px!important;color:#CFC8D8!important;box-shadow:none!important;}
+.add-game-form .modal-rating-select:hover,.add-game-form .modal-rating-select:focus,.add-game-form .modal-rating-select:focus-visible{border-color:#6b4a80!important;background:#1d1824!important;box-shadow:0 0 0 1px rgba(168,85,247,.08)!important;outline:none!important;}
+.add-game-form .modal-rating-select option{background:#17141d!important;}
+.add-game-form .modal-rating-select option:checked{background:#2b2135!important;}
+/* v1.8.1 — unified add-game modal */
+.add-mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:-2px 0 15px;padding:4px;border:1px solid #2b2633;border-radius:10px;background:#110f15;}
+.add-mode-tab{height:36px;border:1px solid transparent;border-radius:8px;background:transparent;color:#96909f;font:inherit;font-size:13px;cursor:pointer;transition:background .16s,border-color .16s,color .16s,transform .18s ease;}
+.add-mode-tab:hover{border-color:#4b3a57;color:#ddd5e4;background:#17131b;}
+.add-mode-tab:active{transform:translateY(1px) scale(.985);}
+.add-mode-tab.active{border-color:#68428a;background:#20162a;color:#eee4f5;box-shadow:inset 0 0 0 1px rgba(201,104,255,.06);}
+.add-mode-pane[hidden]{display:none;}
+.bulk-add-form textarea{min-height:190px;resize:vertical;line-height:1.45;}
+.bulk-add-form .field-hint{font-size:11px;color:#776f7e;margin-top:-1px;}
+/* v1.8.2 — compact per-game add rows and non-scrolling modals. */
+.modal{overflow:hidden!important;}
+.modal-backdrop{overflow:hidden!important;}
+.game-entry-list{display:grid;gap:8px;max-height:none;overflow:visible;}
+.game-entry-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 40px 28px;align-items:center;gap:8px;padding:7px 8px;border:1px solid #2f2a38;border-radius:10px;background:#121017;transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;}
+.game-entry-row:focus-within{border-color:#5d456d;background:#15121b;box-shadow:0 0 0 1px rgba(201,104,255,.08);}
+.game-entry-row.has-error{border-color:#733945;background:#1c1418;}
+.game-entry-main{display:grid;gap:8px;align-items:center;min-width:0;}
+.game-entry-name,.game-entry-rating{width:100%;height:38px;min-height:38px;box-sizing:border-box;}
+.game-entry-name{padding:0 11px!important;}
+.game-entry-rating{padding:0 9px!important;text-align:center;text-align-last:center;appearance:none;-webkit-appearance:none;background:#17141d;color:#CFC8D8;border:1px solid #3a3045;border-radius:9px;}
+.game-entry-rating.rating-liked{color:#FF5FB8;}.game-entry-rating.rating-normal{color:#AFA9BD;}.game-entry-rating.rating-disliked{color:#FF5F6D;}.game-entry-rating.rating-in-progress{color:#A970FF;}.game-entry-rating.rating-planned{color:#5B8CFF;}
+.game-entry-favorite{width:40px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6f6878;border:1px solid #302b39;border-radius:9px;background:#15121b;box-sizing:border-box;transition:border-color .16s ease,color .16s ease,background .16s ease,transform .18s ease;}
+.game-entry-favorite:hover{border-color:#5a4a35;background:#1b1710;color:#FFC94D;}.game-entry-favorite:active{transform:translateY(1px) scale(.97);}
+.game-entry-favorite input{position:absolute;opacity:0;pointer-events:none;}
+.game-entry-favorite span{font-size:0;line-height:1;transition:color .16s ease,transform .18s ease;}
+.game-entry-favorite:has(input:checked){border-color:#69552c;background:#1c180f;color:#FFC94D;}
+.game-entry-remove{width:28px;height:38px;min-width:28px;padding:0;border:0!important;background:transparent!important;color:#827888;font-size:20px!important;line-height:1;display:flex;align-items:center;justify-content:center;border-radius:8px!important;transition:color .16s ease,background .16s ease,transform .18s ease;}
+.game-entry-remove:hover{color:#ff7f8b;background:rgba(255,102,117,.08)!important;}.game-entry-remove:active{transform:translateY(1px) scale(.97);}
+.game-entry-error{grid-column:1/-1;display:none;color:#ff9ea8;font-size:12px;padding:0 2px;}.game-entry-error.show{display:block;}
+.add-entry-btn{width:40px;height:34px;margin:9px auto 0;padding:0;display:flex;align-items:center;justify-content:center;border:1px dashed #473950;border-radius:9px;background:#131018;color:#aaa0b0;font-size:22px;line-height:1;cursor:pointer;transition:border-color .16s ease,background .16s ease,color .16s ease,transform .18s ease;}
+.add-entry-btn:hover{border-color:#7c56a0;background:#1a1521;color:#eee4f4;}.add-entry-btn:active{transform:translateY(1px) scale(.97);}
+.unified-add-modal{width:min(720px,100%)!important;max-height:calc(100vh - 32px)!important;}
+.unified-add-modal .form-actions{margin-top:12px;}
+@media (max-width:700px){.unified-add-modal{max-height:calc(100vh - 20px)!important;}}
+@media (max-width:520px){.game-entry-row{grid-template-columns:minmax(0,1fr) 34px 26px;}.game-entry-main{gap:6px;}.game-entry-favorite{width:34px;}.game-entry-remove{width:26px;min-width:26px;}.game-entry-name,.game-entry-rating{height:36px;min-height:36px;}}
+/* Modal lists remain visually complete without modal-level scrolling. */
+.trash-modal .trash-list{max-height:none!important;overflow:visible!important;}
+/* v1.8.2 visual refinement: modal lock, aligned entry rows, colored rating options, common trash modal. */
+html.modal-open,html.modal-open body{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+body.modal-open{
+  position:fixed!important;
+  width:100%!important;
+}
+.modal-backdrop{
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+.modal{
+  width:min(720px,100%)!important;
+  max-height:calc(100vh - 32px)!important;
+  overflow:hidden!important;
+  padding:20px!important;
+  border:1px solid #3a3045!important;
+  border-radius:15px!important;
+  background:#15121c!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.55)!important;
+}
+.trash-modal,.history-modal{width:min(720px,100%)!important;}
+.trash-modal .history-note{margin-bottom:12px;}
+.trash-modal .form-actions{margin-top:12px;}
+.game-entry-row{
+  grid-template-columns:minmax(0,1fr) 150px 40px 28px!important;
+  min-height:52px!important;
+  align-items:center!important;
+}
+.game-entry-main{
+  grid-column:1 / 3!important;
+  grid-template-columns:minmax(0,1fr) 150px!important;
+  min-width:0!important;
+}
+.game-entry-name,.game-entry-rating{height:38px!important;min-height:38px!important;line-height:1.2!important;}
+.game-entry-favorite{height:38px!important;align-self:center!important;}
+.game-entry-remove{height:38px!important;min-height:38px!important;align-self:center!important;}
+/* The rating select keeps its current value color; individual native options use semantic rating colors when the platform exposes option styling. */
+.game-entry-rating option.rating-liked,.rating-select option.rating-liked{color:#FF5FB8;}
+.game-entry-rating option.rating-normal,.rating-select option.rating-normal{color:#AFA9BD;}
+.game-entry-rating option.rating-disliked,.rating-select option.rating-disliked{color:#FF5F6D;}
+.game-entry-rating option.rating-in-progress,.rating-select option.rating-in-progress{color:#A970FF;}
+.game-entry-rating option.rating-planned,.rating-select option.rating-planned{color:#5B8CFF;}
+.game-entry-rating:focus{
+  outline:none!important;
+  box-shadow:0 0 0 1px rgba(201,104,255,.14)!important;
+}
+@media (max-width:700px){
+  .game-entry-row{grid-template-columns:minmax(0,1fr) 125px 40px 28px!important;}
+  .game-entry-main{grid-column:1 / 3!important;grid-template-columns:minmax(0,1fr) 125px!important;}
+}
+@media (max-width:520px){
+  .game-entry-row{grid-template-columns:minmax(0,1fr) 34px 26px!important;min-height:0!important;}
+  .game-entry-main{grid-column:1 / -1!important;grid-template-columns:1fr!important;}
+}
+/* v1.8.4 — right-click row deletion, removed name-sort control, expanded search. */
+.toolbar{grid-template-columns:minmax(0,1fr) max-content!important;align-items:center!important;}
+.toolbar .search-wrap{grid-column:1!important;width:100%!important;min-width:0!important;}
+.toolbar .resetFilters{grid-column:2!important;}
+/* The A–Я control is intentionally removed from the toolbar. */
+
+/* Three-column table: name, rating, favourite. */
+.game-col{width:auto!important;}
+.rating-col{width:190px!important;}
+
+/* Statistics interaction rules are consolidated in the authoritative semantic layer below.
+   Obsolete click-pulse layers from v1.8.9–v1.8.13 were removed. */
+/* v1.8.15 — statistic cards: inactive hover lift; active cards are completely inert. */
+.stat-card.active,.stat-card.active:hover,.stat-card.active:focus,.stat-card.active:focus-visible,.stat-card.active:active{
+  transform:none !important;
+  top:0 !important;
+  bottom:auto !important;
+  left:auto !important;
+  right:auto !important;
+  animation:none !important;
+  filter:none !important;
+  transition:none !important;
+}
+.stat-card:not(.active):hover{
+  transform:translateY(-3px) !important;
+  filter:brightness(1.08) !important;
+  box-shadow:0 10px 22px rgba(0,0,0,.22) !important;
+}
+.stat-card:not(.active):active{
+  transform:translateY(-3px) !important;
+}
+/* «Всего» всегда использует насыщенное активное оформление подписи. */
+.stat-card.total-card span{
+  color:#D9FBFF !important;
+  text-shadow:0 0 8px rgba(217,251,255,.38) !important;
+}
+/* v1.8.16 — empty results state + reset control polish. */
+.empty-results{
+  min-height:74px;
+  margin:12px 0 0;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#111015;
+  color:var(--muted);
+  font-size:15px;
+}
+.empty-results[hidden]{display:none!important;}
+.table-wrap[hidden]{display:none!important;}
+.toolbar .resetFilters{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.toolbar .resetFilters > span{
+  display:block;
+  font-size:25px!important;
+  line-height:1!important;
+  transform-origin:50% 50%;
+  will-change:transform,filter;
+}
+/* v1.8.17 — reset icon centering, persistent press animation, centered favorite control. */
+.toolbar .resetFilters{
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+}
+.toolbar .resetFilters > span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  line-height:1!important;
+  transform-origin:50% 50%;
+}
+.table-wrap table tbody td:last-child{
+  text-align:center!important;
+  vertical-align:middle!important;
+}
+.table-wrap .favorite-btn{
+  margin:0 auto!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+/* v1.8.18 — active statistics stay physically still; action-button outlines are not clipped. */
+/* Active statistics: permanent outer glow, no additional motion on hover/click. */
+.stat-card.total-card.active,.stat-card.total-card.active:hover,.stat-card.total-card.active:focus,.stat-card.total-card.active:focus-visible,.stat-card.total-card.active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(103,232,249,.15),0 0 18px rgba(103,232,249,.16),inset 0 0 0 1px rgba(255,255,255,.035)!important;
+}
+.stat-card[data-filter-rating="Прохожу"].active,.stat-card[data-filter-rating="Прохожу"].active:hover,.stat-card[data-filter-rating="Прохожу"].active:focus,.stat-card[data-filter-rating="Прохожу"].active:focus-visible,.stat-card[data-filter-rating="Прохожу"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(169,112,255,.12),0 0 18px rgba(169,112,255,.16)!important;
+}
+.stat-card[data-filter-rating="Понравилось"].active,.stat-card[data-filter-rating="Понравилось"].active:hover,.stat-card[data-filter-rating="Понравилось"].active:focus,.stat-card[data-filter-rating="Понравилось"].active:focus-visible,.stat-card[data-filter-rating="Понравилось"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(255,95,184,.12),0 0 18px rgba(255,95,184,.16)!important;
+}
+.stat-card[data-filter-rating="Нормально"].active,.stat-card[data-filter-rating="Нормально"].active:hover,.stat-card[data-filter-rating="Нормально"].active:focus,.stat-card[data-filter-rating="Нормально"].active:focus-visible,.stat-card[data-filter-rating="Нормально"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 20px rgba(175,169,189,.10),0 0 16px rgba(220,214,226,.14)!important;
+}
+.stat-card[data-filter-rating="Не понравилось"].active,.stat-card[data-filter-rating="Не понравилось"].active:hover,.stat-card[data-filter-rating="Не понравилось"].active:focus,.stat-card[data-filter-rating="Не понравилось"].active:focus-visible,.stat-card[data-filter-rating="Не понравилось"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(255,95,109,.12),0 0 18px rgba(255,95,109,.16)!important;
+}
+.stat-card[data-filter-rating="Запланировано"].active,.stat-card[data-filter-rating="Запланировано"].active:hover,.stat-card[data-filter-rating="Запланировано"].active:focus,.stat-card[data-filter-rating="Запланировано"].active:focus-visible,.stat-card[data-filter-rating="Запланировано"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(91,140,255,.12),0 0 18px rgba(91,140,255,.16)!important;
+}
+.stat-card[data-filter-favorite="1"].active,.stat-card[data-filter-favorite="1"].active:hover,.stat-card[data-filter-favorite="1"].active:focus,.stat-card[data-filter-favorite="1"].active:focus-visible,.stat-card[data-filter-favorite="1"].active:active{
+  transform:none!important;
+  box-shadow:0 8px 22px rgba(255,201,77,.13),0 0 18px rgba(255,201,77,.18)!important;
+}
+/* Action buttons: allow full border/shadow rendering on hover. */
+.list-actions,.list-actions button,.list-actions .add-game-action,.list-actions .import-action,.list-actions .export-action{
+  overflow:visible!important;
+  clip-path:none!important;
+}
+/* v1.8.19 — interaction cleanup */
+/* Reset: one animation only; native pressed state must never add a second run. */
+.toolbar .resetFilters,.toolbar .resetFilters:active,.toolbar .resetFilters.reset-press,.toolbar .resetFilters.reset-press:active{
+  transform:none!important;
+}
+.toolbar .resetFilters:active,.toolbar .resetFilters:active > span,.toolbar .resetFilters.reset-press:active,.toolbar .resetFilters.reset-press:active > span{
+  animation:none!important;
+}
+
+
+/* v1.8.20 — final stats/button polish. */
+/* Statistics cards: show only the numeric value, centered and prominent. */
+.quick-stats .stat-card{
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+.quick-stats .stat-card b{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-height:100%!important;
+  margin:0!important;
+  font-size:28px!important;
+  line-height:1!important;
+  font-weight:700!important;
+}
+.quick-stats .stat-card span{display:none!important;}
+/* Wider, uniform active glow around the entire statistics card. */
+.stat-card.total-card.active,.stat-card.total-card.active:hover,.stat-card.total-card.active:focus,.stat-card.total-card.active:focus-visible,.stat-card.total-card.active:active{
+  box-shadow:0 0 0 1px rgba(103,232,249,.72),0 0 26px rgba(103,232,249,.34)!important;
+}
+.stat-card[data-filter-rating="Прохожу"].active,.stat-card[data-filter-rating="Прохожу"].active:hover,.stat-card[data-filter-rating="Прохожу"].active:focus,.stat-card[data-filter-rating="Прохожу"].active:focus-visible,.stat-card[data-filter-rating="Прохожу"].active:active{
+  box-shadow:0 0 0 1px rgba(169,112,255,.72),0 0 26px rgba(169,112,255,.34)!important;
+}
+.stat-card[data-filter-rating="Понравилось"].active,.stat-card[data-filter-rating="Понравилось"].active:hover,.stat-card[data-filter-rating="Понравилось"].active:focus,.stat-card[data-filter-rating="Понравилось"].active:focus-visible,.stat-card[data-filter-rating="Понравилось"].active:active{
+  box-shadow:0 0 0 1px rgba(255,95,184,.72),0 0 26px rgba(255,95,184,.34)!important;
+}
+.stat-card[data-filter-rating="Нормально"].active,.stat-card[data-filter-rating="Нормально"].active:hover,.stat-card[data-filter-rating="Нормально"].active:focus,.stat-card[data-filter-rating="Нормально"].active:focus-visible,.stat-card[data-filter-rating="Нормально"].active:active{
+  box-shadow:0 0 0 1px rgba(175,169,189,.72),0 0 26px rgba(175,169,189,.30)!important;
+}
+.stat-card[data-filter-rating="Не понравилось"].active,.stat-card[data-filter-rating="Не понравилось"].active:hover,.stat-card[data-filter-rating="Не понравилось"].active:focus,.stat-card[data-filter-rating="Не понравилось"].active:focus-visible,.stat-card[data-filter-rating="Не понравилось"].active:active{
+  box-shadow:0 0 0 1px rgba(255,95,109,.72),0 0 26px rgba(255,95,109,.34)!important;
+}
+.stat-card[data-filter-rating="Запланировано"].active,.stat-card[data-filter-rating="Запланировано"].active:hover,.stat-card[data-filter-rating="Запланировано"].active:focus,.stat-card[data-filter-rating="Запланировано"].active:focus-visible,.stat-card[data-filter-rating="Запланировано"].active:active{
+  box-shadow:0 0 0 1px rgba(91,140,255,.72),0 0 26px rgba(91,140,255,.34)!important;
+}
+.stat-card[data-filter-favorite="1"].active,.stat-card[data-filter-favorite="1"].active:hover,.stat-card[data-filter-favorite="1"].active:focus,.stat-card[data-filter-favorite="1"].active:focus-visible,.stat-card[data-filter-favorite="1"].active:active{
+  box-shadow:0 0 0 1px rgba(255,201,77,.72),0 0 26px rgba(255,201,77,.36)!important;
+}
+/* Small action buttons: use the same non-clipping interaction model as Trash. */
+.list-actions{overflow:visible!important;}
+.list-actions button,.list-actions #trashData,.list-actions .add-game-action,.list-actions .import-action,.list-actions .export-action{
+  overflow:visible!important;
+  clip-path:none!important;
+  position:relative!important;
+  box-sizing:border-box!important;
+  transition:border-color .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease!important;
+}
+.list-actions .add-game-action:hover,.list-actions #trashData:hover,.list-actions .import-action:hover,.list-actions .export-action:hover{
+  transform:translateY(-1px)!important;
+}
+.list-actions .add-game-action:active,.list-actions #trashData:active,.list-actions .import-action:active,.list-actions .export-action:active{
+  transform:translateY(1px) scale(.98)!important;
+}
+/* Keep the reset action centered and visually isolated. */
+.toolbar .resetFilters{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+.toolbar .resetFilters > span{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+}
+/* v1.8.21 — statistics centering and action-button interaction parity. */
+.quick-stats .stat-card{position:relative!important;padding:0!important;overflow:visible!important;}
+.quick-stats .stat-card b{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;line-height:1!important;}
+/* Small action controls use the same stable interaction contract as Trash. */
+.list-actions :where(.add-game-action,.import-action,.export-action){
+  position:relative!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  will-change:transform,box-shadow,border-color,background-color,color!important;
+  transition:transform .18s cubic-bezier(.22,.61,.36,1),border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action):hover{transform:translateY(-1px)!important;}
+.list-actions :where(.add-game-action,.import-action,.export-action):active{transform:translateY(1px) scale(.98)!important;}
+.list-actions :where(.add-game-action,.import-action,.export-action):focus,.list-actions :where(.add-game-action,.import-action,.export-action):focus-visible{outline:none!important;}
+/* Keep the hover glow outside the button box and fade it out instead of snapping away. */
+.list-actions :where(.add-game-action,.import-action,.export-action)::after{
+  content:""!important;
+  position:absolute!important;
+  inset:-2px!important;
+  border-radius:11px!important;
+  pointer-events:none!important;
+  opacity:0!important;
+  box-shadow:0 0 16px currentColor!important;
+  transition:opacity .18s ease!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action):hover::after{opacity:.22!important;}
+/* v1.8.22 — rating color always follows the current selected rating. */
+.rating-select.rating-liked{color:var(--like)!important;}
+.rating-select.rating-normal{color:var(--normal)!important;}
+.rating-select.rating-disliked{color:var(--dislike)!important;}
+.rating-select.rating-planned{color:var(--planned)!important;}
+.rating-select.rating-in-progress{color:var(--progress)!important;}
+/* v1.8.23 — favorite rating gold + remove external glow from compact action buttons. */
+.favorite-row .rating-select{
+  color:var(--favorite)!important;
+  text-shadow:0 0 8px rgba(255,201,77,.42)!important;
+}
+.list-actions button:hover,.list-actions button:focus,.list-actions button:focus-visible,.list-actions button:active{
+  box-shadow:none!important;
+}
+.list-actions button::after{
+  content:none!important;
+  display:none!important;
+}
+/* v1.8.24 — compact action buttons: stable hover geometry, no clipped border. */
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData){
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  outline:none!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):hover{
+  transform:none!important;
+  box-shadow:none!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):focus,.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):focus-visible{
+  outline:none!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):active:not(:disabled){
+  transform:translateY(1px) scale(.98)!important;
+}
+/* v1.8.25 — action controls parity with Trash */
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData){
+  --action-rgb: 168,85,247;
+  border-color:rgba(var(--action-rgb),.46)!important;
+  background:rgba(var(--action-rgb),.045)!important;
+  color:rgba(var(--action-rgb),.88)!important;
+  box-shadow:inset 0 0 0 1px rgba(var(--action-rgb),.025)!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  outline:none!important;
+  transform:none!important;
+  transition:border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+.list-actions .add-game-action{--action-rgb:168,85,247;}
+.list-actions .import-action{--action-rgb:91,140,255;}
+.list-actions .export-action{--action-rgb:91,199,135;}
+.list-actions #trashData{--action-rgb:255,95,109;}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):hover{
+  border-color:rgba(var(--action-rgb),.84)!important;
+  background:rgba(var(--action-rgb),.105)!important;
+  color:rgb(var(--action-rgb))!important;
+  box-shadow:0 0 16px rgba(var(--action-rgb),.18)!important;
+  transform:none!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):active:not(:disabled){
+  transform:translateY(1px) scale(.98)!important;
+  box-shadow:0 0 10px rgba(var(--action-rgb),.12)!important;
+}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):focus,.list-actions :where(.add-game-action,.import-action,.export-action,#trashData):focus-visible{outline:none!important;}
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData)::after{content:none!important;display:none!important;}
+/* keep the action glyph itself centered, like the trash glyph */
+.list-actions :where(.add-game-action,.import-action,.export-action,#trashData) .action-icon,.list-actions :where(.add-game-action,.import-action,.export-action,#trashData) .trash-button-icon{
+  margin:0!important;
+}
+/* v1.8.26 — Add button exact interaction parity with Trash. */
+.list-actions .add-game-action{
+  --action-rgb:168,85,247!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  position:relative!important;
+  box-sizing:border-box!important;
+  outline:none!important;
+  transform:none!important;
+  border-color:rgba(var(--action-rgb),.46)!important;
+  background:rgba(var(--action-rgb),.045)!important;
+  color:rgba(var(--action-rgb),.88)!important;
+  box-shadow:inset 0 0 0 1px rgba(var(--action-rgb),.025)!important;
+  transition:border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+.list-actions .add-game-action:active:not(:disabled){
+  transform:translateY(1px) scale(.98)!important;
+  box-shadow:0 0 10px rgba(var(--action-rgb),.12)!important;
+}
+.list-actions .add-game-action:focus,.list-actions .add-game-action:focus-visible{
+  outline:none!important;
+}
+/* Action-button press parity. */
+.list-actions .add-game-action:active:not(:disabled),.list-actions .import-action:active:not(:disabled),.list-actions .export-action:active:not(:disabled),.list-actions #trashData:active:not(:disabled){
+  transform:translateY(1px) scale(.94)!important;
+}
+/* Add Game interaction cleanup. */
+/* Add Game: exactly the same hover/press contract as Trash, only purple. */
+.list-actions .add-game-action{
+  --action-rgb:168,85,247!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  outline:none!important;
+  transform:none!important;
+  border-color:rgba(var(--action-rgb),.46)!important;
+  background:rgba(var(--action-rgb),.045)!important;
+  color:rgba(var(--action-rgb),.88)!important;
+  box-shadow:inset 0 0 0 1px rgba(var(--action-rgb),.025)!important;
+  transition:border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+.list-actions .add-game-action:hover{
+  border-color:rgba(var(--action-rgb),.84)!important;
+  background:rgba(var(--action-rgb),.105)!important;
+  color:rgb(var(--action-rgb))!important;
+  box-shadow:0 0 16px rgba(var(--action-rgb),.18)!important;
+  transform:none!important;
+}
+.list-actions .add-game-action:active:not(:disabled){
+  transform:translateY(1px) scale(.94)!important;
+  box-shadow:0 0 10px rgba(var(--action-rgb),.12)!important;
+}
+.list-actions .add-game-action:focus,.list-actions .add-game-action:focus-visible{outline:none!important;}
+.list-actions .add-game-action::after{content:none!important;display:none!important;}
+/* Add and Trash interaction parity. */
+/* Add and Trash share the same geometry/interaction contract; only their accent color differs. */
+.list-actions :where(.add-game-action,#trashData){
+  position:relative!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  clip-path:none!important;
+  contain:none!important;
+  outline:none!important;
+  transform:none!important;
+  transition:border-color .18s ease,background-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+.list-actions :where(.add-game-action,#trashData):hover{
+  transform:none!important;
+}
+.list-actions :where(.add-game-action,#trashData):active:not(:disabled){
+  transform:translateY(1px) scale(.94)!important;
+}
+.list-actions :where(.add-game-action,#trashData):focus,.list-actions :where(.add-game-action,#trashData):focus-visible{
+  outline:none!important;
+}
+/* Canonical Add/Trash geometry and interaction. */
+.list-actions .add-game-action,.list-actions #trashData{
+  width:32px!important;
+  min-width:32px!important;
+  height:32px!important;
+  min-height:32px!important;
+  padding:0!important;
+  border-radius:9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+  position:relative!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  transform:none!important;
+  transition:border-color .18s ease,background .18s ease,color .18s ease,box-shadow .18s ease,transform .12s ease!important;
+}
+.list-actions .add-game-action .action-icon,.list-actions #trashData .trash-button-icon{
+  margin:0!important;
+}
+.list-actions .add-game-action:hover,.list-actions #trashData:hover{
+  transform:translateY(-1px)!important;
+}
+.list-actions .add-game-action:active:not(:disabled),.list-actions #trashData:active:not(:disabled){
+  transform:translateY(1px) scale(.94)!important;
+}
+.list-actions .add-game-action:focus,.list-actions .add-game-action:focus-visible,.list-actions #trashData:focus,.list-actions #trashData:focus-visible{
+  outline:none!important;
+}
+/* Add uses the same state transitions as Trash; only its accent remains purple. */
+.list-actions .add-game-action{
+  border-color:rgba(174,76,201,.46)!important;
+  background:rgba(168,85,247,.045)!important;
+  color:#d9a8ef!important;
+  box-shadow:inset 0 0 0 1px rgba(168,85,247,.025)!important;
+}
+.list-actions .add-game-action:hover{
+  border-color:rgba(192,110,230,.84)!important;
+  background:rgba(168,85,247,.105)!important;
+  color:#f0cfff!important;
+  box-shadow:0 0 16px rgba(168,85,247,.18)!important;
+}
+.list-actions .add-game-action::before,.list-actions .add-game-action::after{
+  content:none!important;
+  display:none!important;
+}
+/* Canonical reset ripple base. */
+.toolbar .resetFilters{
+  isolation:isolate!important;
+  overflow:visible!important;
+}
+.toolbar .resetFilters::after{
+  content:""!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:10px!important;
+  height:10px!important;
+  border:1px solid rgba(255,255,255,0)!important;
+  border-radius:50%!important;
+  transform:translate(-50%,-50%) scale(.25)!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  z-index:-1!important;
+}
+
+
+.toolbar .resetFilters.reset-press:not(:disabled)>span{
+  
+  transform-origin:50% 50%!important;
+}
+
+
+/* v1.8.32 — reset animation is triggered by the post-release click event; slower timing. */
+.toolbar .resetFilters.reset-press:not(:disabled){animation:resetFilterButtonV832 .94s cubic-bezier(.22,.61,.36,1) both!important;}
+.toolbar .resetFilters.reset-press:not(:disabled)::after{animation:resetFilterRippleV832 .82s cubic-bezier(.22,.61,.36,1) .05s both!important;}
+.toolbar .resetFilters.reset-press:not(:disabled)>span{animation:resetFilterIconV832 .82s cubic-bezier(.22,.61,.36,1) both!important;}
+@keyframes resetFilterButtonV832{
+0%{transform:translateY(0) scale(1);filter:brightness(1);box-shadow:none}
+12%{transform:translateY(1px) scale(.965);filter:brightness(1.06);box-shadow:0 0 0 1px rgba(255,255,255,.10),0 0 12px rgba(255,255,255,.12)}
+30%{transform:translateY(0) scale(1.01);filter:brightness(1.12);box-shadow:0 0 0 3px rgba(255,255,255,.08),0 0 24px rgba(255,255,255,.20)}
+56%{transform:translateY(0) scale(1);filter:brightness(1.055);box-shadow:0 0 0 2px rgba(255,255,255,.05),0 0 18px rgba(255,255,255,.13)}
+80%{filter:brightness(1.018);box-shadow:0 0 0 1px rgba(255,255,255,.025),0 0 8px rgba(255,255,255,.06)}
+100%{transform:translateY(0) scale(1);filter:brightness(1);box-shadow:none}
+}
+@keyframes resetFilterRippleV832{
+0%{transform:translate(-50%,-50%) scale(.25);opacity:0;border-color:rgba(255,255,255,0)}
+12%{opacity:.52;border-color:rgba(255,255,255,.40)}
+50%{opacity:.26;border-color:rgba(255,255,255,.18)}
+100%{transform:translate(-50%,-50%) scale(2.8);opacity:0;border-color:rgba(255,255,255,0)}
+}
+@keyframes resetFilterIconV832{
+0%{transform:rotate(0deg) scale(1);filter:drop-shadow(0 0 0 rgba(255,255,255,0))}
+22%{transform:rotate(-55deg) scale(1.07);filter:drop-shadow(0 0 4px rgba(255,255,255,.22))}
+56%{transform:rotate(305deg) scale(1.13);filter:drop-shadow(0 0 7px rgba(255,255,255,.34))}
+84%{transform:rotate(355deg) scale(1.025);filter:drop-shadow(0 0 3px rgba(255,255,255,.14))}
+100%{transform:rotate(360deg) scale(1);filter:drop-shadow(0 0 0 rgba(255,255,255,0))}
+}
+@media (prefers-reduced-motion:reduce){.toolbar .resetFilters.reset-press:not(:disabled),.toolbar .resetFilters.reset-press:not(:disabled)::after,.toolbar .resetFilters.reset-press:not(:disabled)>span{animation:none!important;}}
+/* v1.8.33 — pagination is a resettable UI state, so reset animation also plays when currentPage !== 1. */
+/* v1.8.34 — reset button is disabled when there is nothing to reset. */
+.toolbar .resetFilters:disabled{
+  cursor:default!important;
+  pointer-events:none!important;
+  opacity:.42!important;
+  filter:saturate(.15)!important;
+  transform:none!important;
+  box-shadow:none!important;
+  border-color:rgba(255,255,255,.16)!important;
+  background:rgba(255,255,255,.025)!important;
+  color:rgba(255,255,255,.42)!important;
+}
+.toolbar .resetFilters:disabled::after{content:none!important;}
+/* Native search clear is hidden. */
+.toolbar .search-wrap #search::-webkit-search-cancel-button,.toolbar .search-wrap #search::-webkit-search-decoration{
+  -webkit-appearance:none;
+  appearance:none;
+  display:none;
+}
+/* Canonical Trash button base transition. */
+.list-actions #trashData{
+  transition:
+    border-color .82s cubic-bezier(.22,.61,.36,1),
+    background-color .82s cubic-bezier(.22,.61,.36,1),
+    color .82s cubic-bezier(.22,.61,.36,1),
+    box-shadow .82s cubic-bezier(.22,.61,.36,1),
+    opacity .98s cubic-bezier(.22,.61,.36,1),
+    filter .98s cubic-bezier(.22,.61,.36,1),
+    transform .18s cubic-bezier(.22,.61,.36,1);
+}
+/* Canonical reset fade. */
+.toolbar .resetFilters.reset-fade-out:not(:disabled){
+  animation:none!important;
+  opacity:.42!important;
+  filter:saturate(.15)!important;
+  box-shadow:none!important;
+}
+.toolbar .resetFilters{
+  transition:opacity 1.18s cubic-bezier(.22,.61,.36,1),filter 1.18s cubic-bezier(.22,.61,.36,1),border-color 1.18s cubic-bezier(.22,.61,.36,1),background-color 1.18s cubic-bezier(.22,.61,.36,1),color 1.18s cubic-bezier(.22,.61,.36,1),box-shadow 1.18s cubic-bezier(.22,.61,.36,1),transform .58s cubic-bezier(.22,.61,.36,1)!important;
+}
+
+
+@media (prefers-reduced-motion:reduce){
+  .toolbar .resetFilters{transition:none!important;}
+  
+}
+/* Suppress reset transitions during initial hydration. */
+html.app-loading .toolbar .resetFilters{transition:none!important;}
+/* v1.8.48 — reset icon visual alignment. */
+.toolbar .resetFilters > span{
+  width:1em!important;
+  height:1em!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:22px!important;
+  line-height:1!important;
+  text-align:center!important;
+  box-sizing:border-box!important;
+}
+/* v1.8.51 — exact mirrored Trash lifecycle. */
+.modal-backdrop.closing{
+  display:flex!important;
+  opacity:1!important;
+  animation:igrotekaModalBackdropCloseV849 .62s cubic-bezier(.22,.61,.36,1) forwards!important;
+}
+.modal-backdrop.closing .modal{
+  animation:igrotekaModalCloseV849 .62s cubic-bezier(.22,.61,.36,1) forwards!important;
+}
+@keyframes igrotekaModalBackdropCloseV849{from{opacity:1}to{opacity:0}}
+@keyframes igrotekaModalCloseV849{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(7px) scale(.985)}}
+/* Remove the legacy basket keyframes from the runtime path. The button itself uses one
+   stable transition; the dot is animated as a separate phase so enter/exit are mirrors. */
+.list-actions #trashData.trash-transition-in,.list-actions #trashData.trash-transition-out{
+  animation:none!important;
+  transition:
+    border-color 1.04s cubic-bezier(.22,.61,.36,1),
+    background-color 1.04s cubic-bezier(.22,.61,.36,1),
+    color 1.04s cubic-bezier(.22,.61,.36,1),
+    box-shadow 1.04s cubic-bezier(.22,.61,.36,1),
+    opacity 1.04s cubic-bezier(.22,.61,.36,1),
+    filter 1.04s cubic-bezier(.22,.61,.36,1)!important;
+}
+.list-actions #trashData.trash-transition-in .trash-button-icon::after{
+  animation:none!important;
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(0)!important;
+  transition:none!important;
+}
+.list-actions #trashData.trash-dot-enter .trash-button-icon::after{
+  animation:trashDotAppearV849 1.04s cubic-bezier(.22,.61,.36,1) both!important;
+}
+.list-actions #trashData.trash-dot-exit .trash-button-icon::after{
+  animation:trashDotAppearV849 1.04s cubic-bezier(.22,.61,.36,1) both reverse!important;
+}
+.list-actions #trashData.trash-transition-in .trash-button-icon::after,.list-actions #trashData.trash-transition-out .trash-button-icon::after{animation:none!important;}
+.list-actions #trashData.trash-transition-out .trash-button-icon::after{
+  animation:trashDotAppearV849 1.04s cubic-bezier(.22,.61,.36,1) both reverse!important;
+}
+@keyframes trashDotAppearV849{
+  0%{transform:translate(-50%,-50%) scale(0);opacity:0;filter:brightness(1)}
+  22%{transform:translate(-50%,-50%) scale(.24);opacity:.16;filter:brightness(1)}
+  46%{transform:translate(-50%,-50%) scale(1.72);opacity:1;filter:brightness(1.38)}
+  68%{transform:translate(-50%,-50%) scale(.82);opacity:1;filter:brightness(1.18)}
+  84%{transform:translate(-50%,-50%) scale(1.08);opacity:1;filter:brightness(1.05)}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:1;filter:brightness(1)}
+}
+.list-actions #trashData.trash-transition-out .trash-button-icon::after{
+  animation-name:trashDotAppearV849!important; animation-direction:reverse!important;
+}
+.list-actions #trashData.trash-transition-in .trash-button-icon::after{
+  animation:none!important;
+}
+/* Disabled target is exactly the last transition frame; there is no color snap. */
+.list-actions #trashData:disabled{
+  cursor:default!important;
+  pointer-events:none!important;
+  border-color:rgba(174,76,91,.20)!important;
+  background:rgba(255,255,255,.025)!important;
+  color:rgba(255,255,255,.42)!important;
+  box-shadow:none!important;
+  opacity:.42!important;
+  filter:saturate(.15) brightness(.96)!important;
+}
+@media (prefers-reduced-motion:reduce){
+  .modal-backdrop.closing,.modal-backdrop.closing .modal{animation:none!important;}
+  .list-actions #trashData.trash-transition-in,.list-actions #trashData.trash-transition-out{transition:none!important;}
+  .list-actions #trashData.trash-dot-enter .trash-button-icon::after,.list-actions #trashData.trash-dot-exit .trash-button-icon::after{animation:none!important;}
+}
+/* v1.8.53 — Trash deactivation finishes on the actual transition frame. */
+.list-actions #trashData.trash-fade-out{
+  transition:
+    border-color .98s cubic-bezier(.22,.61,.36,1),
+    background-color .98s cubic-bezier(.22,.61,.36,1),
+    color .98s cubic-bezier(.22,.61,.36,1),
+    box-shadow .98s cubic-bezier(.22,.61,.36,1),
+    opacity .98s cubic-bezier(.22,.61,.36,1),
+    filter .98s cubic-bezier(.22,.61,.36,1)!important;
+}
+.list-actions #trashData.trash-fade-out{
+  border-color:rgba(174,76,91,.20)!important;
+  background:rgba(255,255,255,.025)!important;
+  color:rgba(255,255,255,.42)!important;
+  box-shadow:none!important;
+  opacity:.42!important;
+  filter:saturate(.15) brightness(.96)!important;
+}
+@media (prefers-reduced-motion:reduce){
+  .list-actions #trashData.trash-fade-out{transition:none!important;}
+}
+/* v1.8.57 — explicit modal opening animation; existing close animation remains unchanged. */
+.modal-backdrop.show:not(.closing){
+  animation:igrotekaModalBackdropOpenV857 .68s cubic-bezier(.22,.61,.36,1) both!important;
+  will-change:opacity,backdrop-filter,-webkit-backdrop-filter;
+}
+.modal-backdrop.show:not(.closing) .modal{
+  animation:igrotekaModalOpenV857 .72s cubic-bezier(.22,.61,.36,1) both!important;
+  will-change:opacity,transform;
+}
+@keyframes igrotekaModalBackdropOpenV857{
+  0%{opacity:0;background:rgba(5,4,8,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
+  38%{opacity:.44;background:rgba(5,4,8,.30);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  72%{opacity:.82;background:rgba(5,4,8,.60);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+  100%{opacity:1;background:rgba(5,4,8,.74);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+}
+@keyframes igrotekaModalOpenV857{
+  0%{opacity:0;transform:translateY(6px) scale(.965)}
+  48%{opacity:.72;transform:translateY(2.2px) scale(.986)}
+  78%{opacity:.96;transform:translateY(.4px) scale(.998)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .modal-backdrop.show:not(.closing),.modal-backdrop.show:not(.closing) .modal{animation:none!important;}
+}
+/* v1.8.54 — slower, smoother unified modal dismissal. */
+.modal-backdrop.closing{
+  display:flex!important;
+  opacity:1!important;
+  background:rgba(5,4,8,.74)!important;
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  animation:igrotekaModalBackdropCloseV852 .84s cubic-bezier(.22,.61,.36,1) forwards!important;
+  will-change:opacity,backdrop-filter,-webkit-backdrop-filter;
+}
+.modal-backdrop.closing .modal{
+  animation:igrotekaModalCloseV852 .84s cubic-bezier(.22,.61,.36,1) forwards!important;
+  will-change:opacity,transform;
+}
+@keyframes igrotekaModalBackdropCloseV852{
+  0%{opacity:1;background:rgba(5,4,8,.74);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+  22%{opacity:.98;background:rgba(5,4,8,.69);backdrop-filter:blur(6.15px);-webkit-backdrop-filter:blur(6.15px)}
+  55%{opacity:.76;background:rgba(5,4,8,.53);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  82%{opacity:.43;background:rgba(5,4,8,.30);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+  100%{opacity:0;background:rgba(5,4,8,0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
+}
+@keyframes igrotekaModalCloseV852{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  22%{opacity:.99;transform:translateY(.6px) scale(.999)}
+  55%{opacity:.82;transform:translateY(2.4px) scale(.994)}
+  82%{opacity:.48;transform:translateY(4.6px) scale(.988)}
+  100%{opacity:0;transform:translateY(7px) scale(.985)}
+}
+@media (prefers-reduced-motion:reduce){
+  .modal-backdrop.closing,.modal-backdrop.closing .modal{animation:none!important;}
+}
+/* v1.8.59 — no trash-state interpolation during the initial hydration paint. */
+html.app-loading .list-actions #trashData,html.app-loading .list-actions #trashData.has-items,html.app-loading .list-actions #trashData .trash-button-icon::after{
+  transition:none!important;
+  animation:none!important;
+}
+/* v1.8.62 — modal animations disabled intentionally; return to instant open/close. */
+.modal-backdrop,.modal-backdrop.show,.modal-backdrop.closing,.modal-backdrop.show:not(.closing),.modal-backdrop.closing .modal,.modal-backdrop.show:not(.closing) .modal{
+  animation: none !important;
+  transition: none !important;
+}
+.modal-backdrop.closing{
+  display: flex !important;
+}
+/* v1.8.64 — table-row deletion: JS drives fade/collapse; FLIP moves surviving rows smoothly. */
+tbody tr.row-context-delete{pointer-events:none!important;will-change:opacity,transform!important;background:transparent!important;box-shadow:none!important;}
+tbody tr.row-context-delete td{background:transparent!important;background-image:none!important;box-shadow:none!important;will-change:opacity,transform,filter!important;}
+@media (prefers-reduced-motion:reduce){tbody tr.row-context-delete td{transition:none!important;}}
+/* v1.8.65 — right-click on table rows: never show the legacy purple focus ring on the read-only game name field. */
+.title .game-name:focus,.title .game-name:focus-visible{
+  background:transparent!important;
+  border:0!important;
+  outline:none!important;
+  box-shadow:none!important;
+}
+/* v1.8.68 — unified typography system. Inter is preferred; existing layout/icon sizing is preserved where intentional. */
+:root{
+  --font-ui:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+  --fs-xs:11px;
+  --fs-sm:12px;
+  --fs-md:14px;
+  --fs-lg:16px;
+  --fs-xl:20px;
+  --fs-2xl:28px;
+}
+html,body{font-family:var(--font-ui)!important;}
+body{font-size:var(--fs-md)!important;line-height:1.4;}
+button,input,select,textarea{font-family:var(--font-ui)!important;font-size:var(--fs-md)!important;}
+/* Primary UI controls. */
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.data-actions,.data-actions button,.form-actions button,.smallBtn,.resetFilters{
+  font-size:var(--fs-md)!important;
+}
+#search{font-size:var(--fs-md)!important;}
+/* Table typography. */
+table,table th,table td,.game-name,.title input,.rating-select{font-size:var(--fs-lg)!important;}
+th{font-size:var(--fs-sm)!important;font-weight:600;}
+.title input{font-weight:500;}
+.rating-select{font-weight:500;}
+/* Intentional icon/indicator sizes — do not normalize these with UI text. */
+.stat-card b{font-size:22px!important;}
+.pagination .pageFirst,.pagination .pageLast{font-size:15px!important;}
+.pagination .pageBtn .pageIcon{font-size:18px!important;}
+.toolbar .resetFilters>span{font-size:22px!important;}
+.add-game-action .action-icon{font-size:16px!important;}
+.data-action .action-icon{font-size:14px!important;}
+.add-entry-btn{font-size:22px!important;}
+.game-entry-remove{font-size:20px!important;}
+
+.icon-close{font-size:14px!important;}
+/* Technical data stays monospace. */
+pre,code,kbd,samp,.technical,.technical-data,[data-technical="true"]{font-family:var(--font-mono)!important;}
+/* v1.8.68 — authoritative typography layer. */
+:root{--font-ui:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;}
+body{font-size:14px!important;line-height:1.4;}
+button,input,select,textarea{font-family:var(--font-ui)!important;}
+body{font-weight:400!important;}
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.data-actions,.data-actions button,.form-actions button,.smallBtn,.resetFilters,#search{font-size:14px!important;}
+table,table td,.game-name,.title input,.rating-select{font-size:16px!important;}
+th{font-size:12px!important;font-weight:600!important;}
+.list-nav,.stats{font-size:12px!important;}
+.stats b,.count strong{font-size:14px!important;}
+.pagination .pageIndicator,.pagination .pageCurrent,.pagination .pageSeparator,.pagination .pageTotal,.pagination .pageBtn{font-size:12px!important;}
+.modal h2,.modal-head h2{font-size:20px!important;font-weight:600!important;}
+.form label{font-size:12px!important;}
+.form input,.form select,.form textarea{font-size:14px!important;}
+.trash-subtitle,.dup-box,.trash-meta,.game-entry-error{font-size:12px!important;}
+
+.add-game-form .field-hint,.add-game-form .field-caption span:last-child{font-size:11px!important;}
+/* v1.8.70 — typography polish: stable metrics, no synthetic weights. */
+:root{
+  --font-ui:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
+  --fs-xs:11px;
+  --fs-sm:12px;
+  --fs-md:14px;
+  --fs-lg:16px;
+  --fs-xl:20px;
+  --fs-2xl:28px;
+  --igroteka-body-line-height:1.4;
+  --igroteka-table-line-height:1.35;
+  --igroteka-control-line-height:1.25;
+  --igroteka-heading-line-height:1.2;
+}
+body{font-size:var(--fs-md)!important;line-height:var(--igroteka-body-line-height)!important;font-weight:400!important;}
+button,input,select,textarea{font-weight:400;}
+/* Authoritative text sizes. */
+h1{font-size:var(--fs-2xl)!important;line-height:1.2!important;}
+.modal h2,.modal-head h2{font-size:var(--fs-xl)!important;line-height:var(--igroteka-heading-line-height)!important;font-weight:600!important;}
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.data-actions,.data-actions button,.form-actions button,.smallBtn,.resetFilters,#search{font-size:var(--fs-md)!important;line-height:var(--igroteka-control-line-height)!important;}
+table,table td,.game-name,.title input,.rating-select{font-size:var(--fs-lg)!important;line-height:var(--igroteka-table-line-height)!important;}
+th{font-size:var(--fs-sm)!important;line-height:1.2!important;font-weight:600!important;letter-spacing:.02em;}
+.list-nav,.stats{font-size:var(--fs-sm)!important;line-height:1.25!important;}
+.stats b,.count strong{font-size:var(--fs-md)!important;line-height:1.2!important;}
+.pagination .pageIndicator,.pagination .pageCurrent,.pagination .pageSeparator,.pagination .pageTotal,.pagination .pageBtn{font-size:var(--fs-sm)!important;}
+.form label{font-size:var(--fs-sm)!important;line-height:1.25!important;}
+.form input,.form select,.form textarea{font-size:var(--fs-md)!important;line-height:var(--igroteka-control-line-height)!important;}
+.history-note{font-size:13px!important;line-height:1.5!important;}
+
+.add-game-form .field-hint,.add-game-form .field-caption span:last-child{font-size:var(--fs-xs)!important;line-height:1.3!important;}
+/* Only textual UI gets the type scale; icons keep their intentional sizes. */
+.stat-card span{font-size:var(--fs-sm)!important;line-height:1.2!important;}
+/* v1.8.73 — Lucide icon subset: consistent SVG rendering without runtime CDN dependency. */
+.lucide-icon{display:block;flex:none;overflow:visible;vector-effect:non-scaling-stroke;pointer-events:none;}
+.action-icon,.toolbar .resetFilters>span{display:inline-flex;align-items:center;justify-content:center;}
+.game-entry-favorite>span{display:inline-flex;align-items:center;justify-content:center;}
+.game-entry-remove{display:inline-flex;align-items:center;justify-content:center;}
+.icon-close{display:inline-flex;align-items:center;justify-content:center;}
+.pageBtn .pageIcon{display:inline-flex;align-items:center;justify-content:center;line-height:0;}
+.add-entry-btn{display:inline-flex;align-items:center;justify-content:center;}
+/* v1.8.75 — mirror the reset icon horizontally; animation remains unchanged and clockwise. */
+.toolbar .resetFilters > span > .lucide-icon{
+  transform:scaleX(-1)!important;
+}
+/* v1.8.75: center pagination numbers symmetrically around the separator. */
+.pagination .pageIndicator{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:center!important;
+  gap:0!important;
+}
+.pagination .pageCurrent,.pagination .pageTotal{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  width:100%!important;
+  line-height:1!important;
+  text-align:center!important;
+}
+.pagination .pageCurrent{grid-column:1!important;}
+.pagination .pageSeparator{grid-column:2!important;display:flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;}
+.pagination .pageTotal{grid-column:3!important;}
+/* v1.8.80 — ratings use compact semantic color dots instead of leading icons. */
+.rating-center{width:max-content!important;max-width:100%!important;position:relative!important;margin-left:auto!important;margin-right:auto!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;}
+.rating-dot{width:7px!important;height:7px!important;min-width:7px!important;min-height:7px!important;border-radius:50%!important;display:inline-block!important;flex:0 0 7px!important;pointer-events:none!important;opacity:.95!important;box-shadow:0 0 8px currentColor!important;}
+.rating-dot-liked .rating-dot{background:var(--like)!important;color:var(--like)!important;}
+.rating-dot-normal .rating-dot{background:var(--normal)!important;color:var(--normal)!important;}
+.rating-dot-disliked .rating-dot{background:var(--dislike)!important;color:var(--dislike)!important;}
+.rating-dot-in-progress .rating-dot{background:var(--progress)!important;color:var(--progress)!important;}
+.rating-dot-planned .rating-dot{background:var(--planned)!important;color:var(--planned)!important;}
+.rating-center .rating-select{padding-left:0!important;padding-right:6px!important;text-align:left!important;text-align-last:left!important;width:max-content!important;max-width:calc(100% - 14px)!important;}
+.game-entry-rating-wrap{position:relative!important;width:100%!important;height:38px!important;min-height:38px!important;box-sizing:border-box!important;display:block!important;}
+.game-entry-rating-wrap .game-entry-rating{position:relative!important;z-index:1!important;width:100%!important;max-width:none!important;height:38px!important;min-height:38px!important;box-sizing:border-box!important;padding-left:10px!important;padding-right:10px!important;text-align:center!important;text-align-last:center!important;}
+.game-entry-rating-wrap:focus-within{border-color:#6b4a80;}
+.game-entry-rating.rating-favorite{color:var(--favorite)!important;}
+/* v1.8.87 — CSS cleanup: one authoritative semantic palette layer. */
+:root{
+  --total:#67E8F9;
+  --progress:#A970FF;
+  --like:#FF5FB8;
+  --normal:#AFA9BD;
+  --dislike:#FF5F6D;
+  --planned:#5B8CFF;
+  --favorite:#FFC94D;
+}
+/* Statistic cards: the semantic color is inherited by every visual state. */
+.stat-card.total-card{--stat-color:var(--total);}
+.stat-card[data-filter-rating="Прохожу"]{--stat-color:var(--progress);}
+.stat-card[data-filter-rating="Понравилось"]{--stat-color:var(--like);}
+.stat-card[data-filter-rating="Нормально"]{--stat-color:var(--normal);}
+.stat-card[data-filter-rating="Не понравилось"]{--stat-color:var(--dislike);}
+.stat-card[data-filter-rating="Запланировано"]{--stat-color:var(--planned);}
+.stat-card[data-filter-favorite="1"]{--stat-color:var(--favorite);}
+.stat-card b,.stat-card span,.stat-card .stat-label .lucide-icon{
+  color:var(--stat-color)!important;
+  text-shadow:none!important;
+}
+.stat-card:not(.active):hover{
+  border-color:var(--stat-color)!important;
+  box-shadow:0 0 22px color-mix(in srgb,var(--stat-color) 22%,transparent)!important;
+}
+.stat-card.active,.stat-card.active:hover,.stat-card.active:focus,.stat-card.active:focus-visible,.stat-card.active:active{
+  border-color:var(--stat-color)!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--stat-color) 18%,transparent),color-mix(in srgb,var(--stat-color) 6%,transparent))!important;
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--stat-color) 54%,transparent),0 0 24px color-mix(in srgb,var(--stat-color) 20%,transparent)!important;
+}
+.stat-card.active b{color:var(--stat-color)!important;text-shadow:0 0 12px color-mix(in srgb,var(--stat-color) 46%,transparent)!important;}
+.stat-card.active span{color:color-mix(in srgb,var(--stat-color) 78%,white 22%)!important;text-shadow:0 0 8px color-mix(in srgb,var(--stat-color) 28%,transparent)!important;}
+/* Table status dots: exact same semantic tokens. */
+tr.rating-liked .title::after{background:var(--like)!important;box-shadow:0 0 9px color-mix(in srgb,var(--like) 90%,transparent)!important;}
+tr.rating-normal .title::after{background:var(--normal)!important;box-shadow:0 0 8px color-mix(in srgb,var(--normal) 60%,transparent)!important;}
+tr.rating-disliked .title::after{background:var(--dislike)!important;box-shadow:0 0 9px color-mix(in srgb,var(--dislike) 90%,transparent)!important;}
+tr.rating-planned .title::after{background:var(--planned)!important;box-shadow:0 0 9px color-mix(in srgb,var(--planned) 90%,transparent)!important;}
+tr.rating-in-progress .title::after{background:var(--progress)!important;box-shadow:0 0 9px color-mix(in srgb,var(--progress) 90%,transparent)!important;}
+tr.favorite-row .title::after{background:var(--favorite)!important;box-shadow:0 0 9px color-mix(in srgb,var(--favorite) 95%,transparent),0 0 16px color-mix(in srgb,var(--favorite) 45%,transparent)!important;}
+/* Current values and option lists. */
+.rating-select.rating-liked,.game-entry-rating.rating-liked{color:var(--like)!important;}
+.rating-select.rating-normal,.game-entry-rating.rating-normal{color:var(--normal)!important;}
+.rating-select.rating-disliked,.game-entry-rating.rating-disliked{color:var(--dislike)!important;}
+.rating-select.rating-in-progress,.game-entry-rating.rating-in-progress{color:var(--progress)!important;}
+.rating-select.rating-planned,.game-entry-rating.rating-planned{color:var(--planned)!important;}
+.rating-select option[value="Понравилось"],.game-entry-rating option[value="Понравилось"],.game-entry-rating option.rating-liked{color:var(--like)!important;}
+.rating-select option[value="Нормально"],.game-entry-rating option[value="Нормально"],.game-entry-rating option.rating-normal{color:var(--normal)!important;}
+.rating-select option[value="Не понравилось"],.game-entry-rating option[value="Не понравилось"],.game-entry-rating option.rating-disliked{color:var(--dislike)!important;}
+.rating-select option[value="Прохожу"],.game-entry-rating option[value="Прохожу"],.game-entry-rating option.rating-in-progress{color:var(--progress)!important;}
+.rating-select option[value="Запланировано"],.game-entry-rating option[value="Запланировано"],.game-entry-rating option.rating-planned{color:var(--planned)!important;}
+.favorite-btn:hover,.favorite-btn.on,.game-entry-favorite:hover,.game-entry-favorite:has(input:checked){color:var(--favorite)!important;}
+.favorite-btn.on{text-shadow:0 0 10px color-mix(in srgb,var(--favorite) 85%,transparent)!important;}
+.favorite-row .rating-select.rating-liked{color:var(--like)!important;}
+.favorite-row .rating-select.rating-normal{color:var(--normal)!important;}
+.favorite-row .rating-select.rating-disliked{color:var(--dislike)!important;}
+.favorite-row .rating-select.rating-in-progress{color:var(--progress)!important;}
+.favorite-row .rating-select.rating-planned{color:var(--planned)!important;}
+/* v1.8.88 — semantic color conflict cleanup.
+   Favorite is an independent flag: it must never replace the game's status color.
+   Statistic click pulses also inherit the selected card's semantic color instead of the old global purple. */
+.stat-card.total-card,.stat-card[data-filter-rating="Прохожу"],.stat-card[data-filter-rating="Понравилось"],.stat-card[data-filter-rating="Нормально"],.stat-card[data-filter-rating="Не понравилось"],.stat-card[data-filter-rating="Запланировано"],.stat-card[data-filter-favorite="1"]{
+  --stat-pulse-color:var(--stat-color);
+}
+/* The status dot in the game-name column always follows the actual status.
+   Favorite is represented by the star, not by repainting the status dot yellow. */
+tr.favorite-row.rating-liked .title::after{background:var(--like)!important;box-shadow:0 0 9px color-mix(in srgb,var(--like) 90%,transparent)!important;}
+tr.favorite-row.rating-normal .title::after{background:var(--normal)!important;box-shadow:0 0 8px color-mix(in srgb,var(--normal) 60%,transparent)!important;}
+tr.favorite-row.rating-disliked .title::after{background:var(--dislike)!important;box-shadow:0 0 9px color-mix(in srgb,var(--dislike) 90%,transparent)!important;}
+tr.favorite-row.rating-in-progress .title::after{background:var(--progress)!important;box-shadow:0 0 9px color-mix(in srgb,var(--progress) 90%,transparent)!important;}
+tr.favorite-row.rating-planned .title::after{background:var(--planned)!important;box-shadow:0 0 9px color-mix(in srgb,var(--planned) 90%,transparent)!important;}
+/* A favorite row may have a yellow accent elsewhere, but its rating cell keeps the status color. */
+tr.favorite-row.rating-liked td:nth-child(2),tr.favorite-row.rating-normal td:nth-child(2),tr.favorite-row.rating-disliked td:nth-child(2),tr.favorite-row.rating-in-progress td:nth-child(2),tr.favorite-row.rating-planned td:nth-child(2){color:inherit!important;}
+/* v1.8.89 — favorite is a dedicated rating/status. */
+.rating-select.rating-favorite,.game-entry-rating.rating-favorite{color:var(--favorite)!important;}
+.rating-select option.rating-favorite,.game-entry-rating option.rating-favorite{color:var(--favorite)!important;}
+.rating-dot-favorite .rating-dot{background:var(--favorite)!important;color:var(--favorite)!important;}
+tr.rating-favorite .title::after{background:var(--favorite)!important;box-shadow:0 0 9px color-mix(in srgb,var(--favorite) 95%,transparent),0 0 16px color-mix(in srgb,var(--favorite) 45%,transparent)!important;}
+tr.rating-favorite td.rating-cell{color:var(--favorite)!important;}
+tr.rating-favorite .favorite-btn{color:var(--favorite)!important;}
+/* v1.8.90 — favorite is available only from «Понравилось». */
+.favorite-btn:disabled{cursor:not-allowed!important;opacity:.42!important;color:#6f6878!important;border-color:#302b39!important;background:#15121b!important;box-shadow:none!important;}
+.game-entry-favorite:has(input:disabled){cursor:not-allowed;opacity:.48;}
+.game-entry-favorite:has(input:disabled):hover{border-color:#302b39;background:#15121b;color:#6f6878;}
+/* v1.8.93 — rating is centered as a symmetric group with a status dot on both sides. */
+.rating-cell .rating-center{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:max-content max-content max-content!important;
+  align-items:center!important;
+  justify-content:center!important;
+  column-gap:7px!important;
+}
+.rating-cell .rating-center .rating-dot{
+  justify-self:center!important;
+  margin:0!important;
+}
+.rating-cell .rating-center .rating-dot-left{grid-column:1!important;}
+.rating-cell .rating-center .rating-select{
+  grid-column:2!important;
+  justify-self:center!important;
+  margin:0!important;
+  padding-left:6px!important;
+  padding-right:6px!important;
+  text-align:center!important;
+  text-align-last:center!important;
+  width:max-content!important;
+  max-width:100%!important;
+}
+.rating-cell .rating-center .rating-dot-right{grid-column:3!important;}
+/* v1.8.94 — add a little breathing room between the centered rating group and the favorite star. */
+.favorite-col{width:64px!important;}
+.table-wrap tbody td:nth-child(3){padding-left:16px!important;padding-right:16px!important;}
+/* legacy v1.8.95/v1.8.96 zoom removed: interface now uses explicit CSS sizing. */
+/* v1.8.96 — unified add-game row: favorite is selectable only through the star,
+   remains hidden from the dropdown, and the rating field uses symmetric dots. */
+.game-entry-rating option.rating-favorite{display:none!important;}
+.game-entry-rating-wrap.rating-dot-favorite .rating-dot{background:var(--favorite)!important;color:var(--favorite)!important;}
+.game-entry-favorite:has(input:checked){border-color:#69552c!important;background:#1c180f!important;color:var(--favorite)!important;}
+/* v1.8.97 — widen the add-game rating field so every rating label fits cleanly. */
+.game-entry-main{grid-template-columns:minmax(0,1fr) 190px!important;}
+@media (max-width:700px){.game-entry-main{grid-template-columns:minmax(0,1fr) 165px!important;}}
+@media (max-width:520px){.game-entry-main{grid-template-columns:1fr!important;}}
+/* v1.8.100: cleaned table shine implementation; JS layer is the only active shine. */
+.row-shine-js-layer{position:absolute!important;pointer-events:none!important;z-index:100000!important;box-sizing:border-box!important;overflow:hidden!important;clip-path:inset(0)!important;}
+.row-shine-js-beam{position:absolute!important;pointer-events:none!important;will-change:transform,opacity!important;}
+/* Igroteka — interaction stability for editable/search controls */
+input:not([disabled]):not([readonly]),textarea:not([disabled]):not([readonly]),select:not([disabled]),[contenteditable="true"]{
+  pointer-events:auto !important;
+  user-select:text !important;
+  -webkit-user-select:text !important;
+  position:relative;
+  z-index:3;
+}
+input:focus,textarea:focus,select:focus,[contenteditable="true"]:focus{
+  outline:none;
+}
+.modal-backdrop:not(.show){
+  pointer-events:none !important;
+}
+.modal-backdrop.show{pointer-events:auto !important;}
+/* Igroteka typography compatibility layer. */
+body{font-size:14px!important;line-height:1.4!important;}
+button,input,select,textarea{font-size:14px!important;}
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.data-actions,.data-actions button,.form-actions button,.smallBtn,.resetFilters,#search{font-size:14px!important;line-height:1.25!important;}
+table,table td,.game-name,.title input,.rating-select{font-size:14px!important;line-height:1.35!important;}
+th{font-size:11px!important;line-height:1.2!important;}
+.list-nav,.stats{font-size:12px!important;}
+.stats b,.count strong{font-size:14px!important;}
+.pagination .pageIndicator,.pagination .pageCurrent,.pagination .pageSeparator,.pagination .pageTotal,.pagination .pageBtn{font-size:12px!important;}
+.form label{font-size:12px!important;line-height:1.25!important;}
+.form input,.form select,.form textarea{font-size:14px!important;line-height:1.25!important;}
+.trash-subtitle,.dup-box,.trash-meta,.game-entry-error{font-size:12px!important;}
+/* Igroteka — native 100% project scale.
+   Remove the old page-wide zoom so the whole Igroteka renders at its native CSS size. */
+button,.stat-card,.list-actions,.pagination,.nav-controls,.toolbar,.modal,.form-actions,.add-entry-btn{pointer-events:auto!important;}
+.modal-backdrop:not(.show){pointer-events:none!important;}
+.modal-backdrop.show{pointer-events:auto!important;}
+button:not(:disabled),.stat-card:not(:disabled),.list-actions button:not(:disabled),.pagination .pageBtn:not(:disabled){cursor:pointer!important;}
+button:disabled{cursor:default!important;}
+/* v0.84.1 — optical centering of the Trash status dot. */
+/* v0.84.3 — restore true center anchoring for the Trash status dot.
+   The dot already uses translate(-50%,-50%) in its animations, so centering it
+   with four auto insets applied the translation twice and shifted it up/left. */
+.list-actions #trashData .trash-button-icon::after{
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  margin:0!important;
+  transform:translate(-50%,-50%) scale(1);
+}
+/* v0.84.5 — exact visual centering of the Trash status dot. */
+.list-actions #trashData .trash-button-icon::after{
+  width:3px!important;
+  height:3px!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  margin:0!important;
+  transform:translate(-50%,-50%) scale(1);
+}
+/* v0.84.6 — native-scale dot centering. */
+.list-actions #trashData .trash-button-icon::after{
+  left:50%!important;
+  top:50%!important;
+}
+/* v0.84.4 — Igroteka typography scale: enlarge textual UI evenly while preserving icon geometry. */
+:root{
+  --igroteka-fs-xs:12px;
+  --igroteka-fs-sm:13px;
+  --igroteka-fs-md:15px;
+  --igroteka-fs-lg:17px;
+  --igroteka-fs-xl:22px;
+  --igroteka-fs-2xl:31px;
+}
+body{font-size:var(--igroteka-fs-md)!important;line-height:1.4!important;}
+button,input,select,textarea{font-size:var(--igroteka-fs-md)!important;}
+.toolbar,.toolbar button,.toolbar input,.toolbar select,.list-actions,.list-actions button,.data-actions,.data-actions button,.form-actions button,.smallBtn,.resetFilters,#search{font-size:var(--igroteka-fs-md)!important;line-height:1.25!important;}
+table,table td,.game-name,.title input,.rating-select{font-size:var(--igroteka-fs-lg)!important;line-height:1.35!important;}
+th{font-size:var(--igroteka-fs-sm)!important;line-height:1.2!important;}
+.list-nav,.stats{font-size:var(--igroteka-fs-sm)!important;line-height:1.25!important;}
+.stats b,.count strong{font-size:var(--igroteka-fs-md)!important;line-height:1.2!important;}
+.pagination .pageIndicator,.pagination .pageCurrent,.pagination .pageSeparator,.pagination .pageTotal,.pagination .pageBtn{font-size:var(--igroteka-fs-sm)!important;}
+.form label{font-size:var(--igroteka-fs-sm)!important;line-height:1.25!important;}
+.form input,.form select,.form textarea{font-size:var(--igroteka-fs-md)!important;line-height:1.25!important;}
+.modal h2,.modal-head h2{font-size:var(--igroteka-fs-xl)!important;line-height:1.2!important;}
+h1{font-size:var(--igroteka-fs-2xl)!important;line-height:1.2!important;}
+.history-note{font-size:14px!important;line-height:1.5!important;}
+.trash-subtitle,.dup-box,.trash-meta,.game-entry-error{font-size:var(--igroteka-fs-sm)!important;}
+
+.add-game-form .field-hint,.add-game-form .field-caption span:last-child{font-size:var(--igroteka-fs-xs)!important;line-height:1.3!important;}
+.stat-card span{font-size:var(--igroteka-fs-sm)!important;line-height:1.2!important;}
+/* v0.84.4 — remaining textual components use the same +10% scale. */
+.stat-card b{font-size:24px!important;line-height:1.1!important;}
+.trash-name{font-size:17px!important;line-height:1.3!important;}
+.trash-actions button{font-size:13px!important;}
+.add-mode-tab{font-size:14px!important;}
+.toast-stack-item{font-size:14px!important;}
+.game-entry-rating option.rating-in-progress{color:var(--progress)!important;}
+/* v1.09 — semantic palette continues through Trash and the Add Game modal. */
+.trash-meta.rating-liked{color:var(--like)!important;}
+.trash-meta.rating-normal{color:var(--normal)!important;}
+.trash-meta.rating-disliked{color:var(--dislike)!important;}
+.trash-meta.rating-in-progress{color:var(--progress)!important;}
+.trash-meta.rating-planned{color:var(--planned)!important;}
+.trash-meta.rating-favorite{color:var(--favorite)!important;}
+/* Canonical Add Game favorite control: deterministic centering, no hover zoom. */
+.unified-add-modal .game-entry-favorite{
+  position:relative!important;
+  width:40px!important;
+  min-width:40px!important;
+  height:38px!important;
+  min-height:38px!important;
+  display:block!important;
+  padding:0!important;
+  margin:0 auto!important;
+  box-sizing:border-box!important;
+  line-height:0!important;
+  justify-self:center!important;
+  align-self:center!important;
+  text-align:center!important;
+}
+.unified-add-modal .game-entry-favorite>span{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:18px!important;
+  height:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  transform:translate(-50%,-50%)!important;
+  line-height:0!important;
+}
+.unified-add-modal .game-entry-favorite>span>.lucide-icon{
+  width:17px!important;
+  height:17px!important;
+  min-width:17px!important;
+  min-height:17px!important;
+  display:block!important;
+  margin:0!important;
+  overflow:visible!important;
+  transform:none!important;
+  transform-origin:center!important;
+  stroke-width:1.8!important;
+}
+.unified-add-modal .game-entry-favorite:not(:has(input:disabled)):hover>span{
+  transform:translate(-50%,-50%)!important;
+}
+.unified-add-modal .game-entry-favorite:not(:has(input:disabled)):hover>span>.lucide-icon{
+  filter:none!important;
+}
+.unified-add-modal .game-entry-favorite:has(input:checked)>span>.lucide-icon{
+  filter:drop-shadow(0 0 6px rgba(255,201,77,.42));
+}
+/* v1.22 — restore the gold favorite background used by the earlier add-entry design. */
+.unified-add-modal .game-entry-favorite:has(input:checked){
+  border-color:#69552c!important;
+  background:#1c180f!important;
+  color:var(--favorite)!important;
+}
+.unified-add-modal .game-entry-favorite:has(input:checked):hover{
+  border-color:#806a35!important;
+  background:#241d10!important;
+}
+/* v1.42 narrow windows: keep notifications in normal document flow so content is never covered. */
+@media (max-width:1410px){
+  #toastStack{position:relative;left:auto;right:auto;bottom:auto;width:min(390px,100%);max-width:390px;margin:0 0 12px auto;}
+}
+@media (max-width:700px){
+  #toastStack{width:100%;max-width:none;margin:0 0 12px 0;}
+  .toast-stack-item{min-height:46px;font-size:13px;}
+}
+/* v1.43: notifications live in the actual gutter beside the table. */
+#toastStack.toast-side-rail{
+  z-index:50;
+  display:grid;
+  gap:10px;
+  pointer-events:none;
+  align-items:stretch;
+  max-height:calc(100vh - 84px);
+  overflow:visible;
+}
+#toastStack.toast-side-rail .toast-stack-item{
+  width:100%;
+  max-width:none;
+}
+/* v1.49 — stable project viewport/background surface. */
+html{width:100%;height:100%;min-height:100%;background:var(--bg);}
+body{width:100%;height:100%;min-height:100vh;min-width:0;box-sizing:border-box;background:transparent !important;}
+body::before{min-height:100vh;}
+/* Working polish: softer element frames. */
+:root{
+  --border:rgba(42,37,50,.76);
+  --control-border:rgba(157,150,168,.34);
+  --control-border-hover:rgba(157,150,168,.70);
+}
+.stat-card{border-color:var(--border);}
+.table-wrap{border-color:var(--border);}
+.pageBtn{border-color:var(--border);}
+.save{border-color:var(--border);}
+/* v1.88 trial — unified Trash modal polish. */
+.trash-modal{
+  width:max-content!important;
+  max-width:calc(100vw - 40px)!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.trash-modal .trash-list{
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  padding:2px 2px 2px 1px!important;
+}
+.trash-modal .trash-item{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) max-content!important;
+  gap:14px!important;
+  align-items:center!important;
+  width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  padding:13px 12px!important;
+  overflow:visible!important;
+}
+.trash-modal .trash-info{
+  min-width:0!important;
+  width:100%!important;
+  overflow:visible!important;
+}
+.trash-modal .trash-name{
+  min-width:0!important;
+  max-width:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.trash-modal .trash-meta{
+  margin-top:4px!important;
+  line-height:1.25!important;
+}
+.trash-modal .trash-actions{
+  flex:0 0 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  align-self:center!important;
+  white-space:normal!important;
+}
+.trash-modal .trash-actions button{
+  min-width:0!important;
+  flex:0 1 auto!important;
+  box-sizing:border-box!important;
+  white-space:nowrap!important;
+}
+.trash-modal .form-actions{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+@media (max-width:760px){
+  .trash-modal{
+    width:fit-content!important;
+    max-width:calc(100vw - 24px)!important;
+  }
+  .trash-modal .trash-item{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+  }
+  .trash-modal .trash-actions{
+    width:100%!important;
+    justify-content:stretch!important;
+  }
+  .trash-modal .trash-actions button{
+    flex:1 1 140px!important;
+  }
+}
+@media (max-width:430px){
+  .trash-modal .trash-actions button{
+    flex-basis:100%!important;
+  }
+}
+/* PATCH 018 — project-local dropdown popup theme. */
+select:not([hidden]){color-scheme:dark;}
+select:not([hidden]) option,select:not([hidden]) optgroup{background:#16131b;color:#e9e2ee;}
+select:not([hidden]) option:checked{background:#2b2135;color:#f3e8ff;}
+
+
+/* v1.0 Theme Preview 1 — Cinema Mono Parity.
+   Port the confirmed Cinema Mono language while preserving Igroteka semantics and geometry. */
+:root{
+  --bg:#020203;
+  --panel:#101112;
+  --panel2:#171819;
+  --text:#f4f4f4;
+  --muted:#9a9da2;
+  --border:rgba(255,255,255,.11);
+  --control-border:rgba(255,255,255,.14);
+  --control-border-hover:rgba(255,255,255,.34);
+  --mono-glass-strong:rgba(10,11,13,.84);
+  --mono-glass:rgba(12,13,15,.70);
+  --mono-glass-soft:rgba(15,16,18,.61);
+  --mono-glass-hover:rgba(21,22,25,.71);
+  --utility-white-border:rgba(255,255,255,.18);
+  --utility-white-border-hover:rgba(255,255,255,.38);
+  --utility-white-border-active:rgba(255,255,255,.76);
+  --utility-white-surface:rgba(255,255,255,.032);
+  --utility-white-surface-hover:rgba(255,255,255,.070);
+  --utility-white-surface-active:rgba(255,255,255,.10);
+  --utility-white-text:rgba(245,246,248,.92);
+  --utility-white-muted:rgba(255,255,255,.38);
+}
+html{background:#020203!important;background-color:#020203!important}
+body{background:transparent!important;background-color:transparent!important;color:var(--text)!important}
+
+/* Passive list chrome is graphite/black and translucent enough for living particles to remain visible. */
+.table-wrap{
+  background:var(--mono-glass)!important;
+  border-color:rgba(255,255,255,.11)!important;
+  box-shadow:0 12px 40px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.018)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+tbody td{border-bottom-color:rgba(255,255,255,.075)!important}
+tbody tr:hover td{background:rgba(21,22,25,.68)!important}
+.title input{color:#f4f4f4!important}
+.title input:focus{background:rgba(21,22,25,.74)!important}
+.empty-results{background:rgba(12,13,15,.68)!important;border-color:rgba(255,255,255,.11)!important;color:#a2a5aa!important}
+
+/* Inactive quick stats are monochrome; semantic color appears only on interaction/active state. */
+.stat-card:not(.active),
+.stat-card.total-card:not(.active),
+.stat-card[data-filter-rating="Прохожу"]:not(.active),
+.stat-card[data-filter-rating="Понравилось"]:not(.active),
+.stat-card[data-filter-rating="Нормально"]:not(.active),
+.stat-card[data-filter-rating="Не понравилось"]:not(.active),
+.stat-card[data-filter-rating="Запланировано"]:not(.active),
+.stat-card[data-filter-favorite="1"]:not(.active){
+  background:var(--mono-glass-soft)!important;
+  border-color:rgba(255,255,255,.11)!important;
+  color:#ececec!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.stat-card:not(.active) b,.stat-card:not(.active) span{color:#c9c9c9!important;text-shadow:none!important}
+.stat-card:not(.active):hover{background:var(--mono-glass-hover)!important;border-color:rgba(255,255,255,.22)!important}
+.stat-card.total-card:not(.active):hover b{color:var(--total)!important;text-shadow:0 0 12px color-mix(in srgb,var(--total) 52%,transparent)!important}
+.stat-card[data-filter-rating="Прохожу"]:not(.active):hover b{color:var(--progress)!important;text-shadow:0 0 12px color-mix(in srgb,var(--progress) 52%,transparent)!important}
+.stat-card[data-filter-rating="Понравилось"]:not(.active):hover b{color:var(--like)!important;text-shadow:0 0 12px color-mix(in srgb,var(--like) 52%,transparent)!important}
+.stat-card[data-filter-rating="Нормально"]:not(.active):hover b{color:var(--normal)!important;text-shadow:0 0 12px color-mix(in srgb,var(--normal) 44%,transparent)!important}
+.stat-card[data-filter-rating="Не понравилось"]:not(.active):hover b{color:var(--dislike)!important;text-shadow:0 0 12px color-mix(in srgb,var(--dislike) 52%,transparent)!important}
+.stat-card[data-filter-rating="Запланировано"]:not(.active):hover b{color:var(--planned)!important;text-shadow:0 0 12px color-mix(in srgb,var(--planned) 52%,transparent)!important}
+.stat-card[data-filter-favorite="1"]:not(.active):hover b{color:var(--favorite)!important;text-shadow:0 0 13px color-mix(in srgb,var(--favorite) 56%,transparent)!important}
+
+/* Neutral white search/reset utilities. */
+.search-wrap #search,.search-wrap #search:hover{
+  border-color:rgba(255,255,255,.13)!important;
+  background:rgba(10,11,13,.64)!important;
+  color:#f3f4f6!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.search-wrap #search:focus,.search-wrap #search:focus-visible{
+  outline:none!important;
+  border-color:rgba(255,255,255,.42)!important;
+  background:rgba(12,13,15,.74)!important;
+  color:#fff!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 0 0 3px rgba(255,255,255,.055),0 0 14px rgba(255,255,255,.06)!important;
+}
+.search-wrap #search::placeholder{color:rgba(224,226,232,.44)!important}
+.toolbar .resetFilters:not(:disabled),
+.toolbar .resetFilters.reset-press:not(:disabled),
+.toolbar .resetFilters:active:not(:disabled),
+.toolbar .resetFilters.reset-press:active:not(:disabled){
+  border-color:var(--utility-white-border)!important;
+  background:var(--utility-white-surface)!important;
+  color:var(--utility-white-text)!important;
+  box-shadow:none!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.toolbar .resetFilters:hover:not(:disabled){
+  border-color:var(--utility-white-border-hover)!important;
+  background:var(--utility-white-surface-hover)!important;
+  color:#fff!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06),0 0 16px rgba(255,255,255,.09)!important;
+}
+.toolbar .resetFilters:focus,.toolbar .resetFilters:focus-visible{
+  outline:none!important;border-color:var(--utility-white-border-active)!important;background:var(--utility-white-surface-hover)!important;color:#fff!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 0 3px rgba(255,255,255,.08)!important;
+}
+.toolbar .resetFilters.reset-press:not(:disabled){background:var(--utility-white-surface-active)!important;border-color:var(--utility-white-border-active)!important;color:#fff!important}
+.toolbar .resetFilters::after{background:rgba(255,255,255,.16)!important;box-shadow:none!important}
+.toolbar .resetFilters:disabled{border-color:rgba(255,255,255,.08)!important;background:rgba(255,255,255,.018)!important;color:var(--utility-white-muted)!important;box-shadow:none!important;filter:none!important}
+
+/* Add is monochrome white. Empty Trash is neutral; actionable Trash alone turns red. */
+.list-actions .add-game-action{
+  border-color:rgba(255,255,255,.42)!important;
+  background:rgba(255,255,255,.035)!important;
+  color:#f0f2f4!important;
+  box-shadow:none!important;
+}
+.list-actions .add-game-action:hover{
+  border-color:rgba(255,255,255,.92)!important;
+  background:rgba(255,255,255,.10)!important;
+  color:#fff!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.10),0 0 18px rgba(255,255,255,.16)!important;
+}
+.list-actions .add-game-action:active:not(:disabled){background:rgba(255,255,255,.075)!important;box-shadow:0 0 12px rgba(255,255,255,.10)!important}
+.list-actions #trashData:not(.has-items){border-color:rgba(255,255,255,.12)!important;background:rgba(10,11,13,.65)!important;color:#777b81!important;box-shadow:none!important}
+.list-actions #trashData:not(.has-items):not(:disabled):hover{border-color:rgba(255,255,255,.28)!important;background:rgba(20,21,24,.72)!important;color:#d6d8dc!important;box-shadow:0 0 0 1px rgba(255,255,255,.025)!important}
+.list-actions #trashData.has-items{border-color:color-mix(in srgb,var(--dislike) 70%,#303236 30%)!important;background:color-mix(in srgb,var(--dislike) 7%,rgba(10,11,13,.68) 93%)!important;color:color-mix(in srgb,var(--dislike) 64%,white 36%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--dislike) 8%,transparent),0 0 13px color-mix(in srgb,var(--dislike) 13%,transparent)!important}
+.list-actions #trashData.has-items:hover{border-color:var(--dislike)!important;background:color-mix(in srgb,var(--dislike) 13%,#0c0d0f 87%)!important;color:color-mix(in srgb,var(--dislike) 44%,white 56%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--dislike) 14%,transparent),0 0 18px color-mix(in srgb,var(--dislike) 24%,transparent)!important}
+.list-actions #trashData:disabled,.list-actions #trashData.has-items.trash-fade-out{border-color:#292b2e!important;background:#0b0c0e!important;color:#62666b!important;box-shadow:none!important;opacity:.48!important;filter:none!important}
+
+/* Pagination is always neutral white/graphite, matching the confirmed Cinema Mono final state. */
+:root{
+  --pagination-white-border:rgba(255,255,255,.16);
+  --pagination-white-border-hover:rgba(255,255,255,.34);
+  --pagination-white-border-active:rgba(255,255,255,.72);
+  --pagination-white-surface:rgba(255,255,255,.032);
+  --pagination-white-surface-hover:rgba(255,255,255,.062);
+  --pagination-white-surface-active:rgba(255,255,255,.092);
+  --pagination-white-text:rgba(244,245,248,.90);
+  --pagination-white-text-soft:rgba(224,226,232,.72);
+}
+.pagination,.pagination *{--control-text:var(--pagination-white-text)!important}
+.pagination .pageBtn{border-color:var(--pagination-white-border)!important;background:var(--pagination-white-surface)!important;color:var(--pagination-white-text)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.pagination .pageBtn:hover:not(:disabled){border-color:var(--pagination-white-border-hover)!important;background:var(--pagination-white-surface-hover)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 0 16px rgba(255,255,255,.08)!important}
+.pagination .pageBtn:focus,.pagination .pageBtn:focus-visible{outline:none!important;border-color:var(--pagination-white-border-active)!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 0 3px rgba(255,255,255,.08)!important}
+.pagination .pageBtn.active,.pagination .pageBtn[aria-current="page"]{border-color:var(--pagination-white-border-active)!important;background:var(--pagination-white-surface-active)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 0 18px rgba(255,255,255,.12)!important}
+.pagination .pageBtn:disabled{border-color:rgba(255,255,255,.08)!important;background:rgba(255,255,255,.018)!important;color:rgba(255,255,255,.34)!important;box-shadow:none!important;opacity:.52!important}
+.pagination .pageIndicator{border:1px solid var(--pagination-white-border)!important;background:rgba(255,255,255,.030)!important;color:var(--pagination-white-text)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.pagination .pageCurrent{color:#fff!important;font-weight:700!important}.pagination .pageSeparator,.pagination .pageTotal{color:var(--pagination-white-text-soft)!important}
+
+/* Modal chrome: neutral black glass; only semantic/destructive actions carry color. */
+.modal-backdrop{background:rgba(0,0,0,.76)!important}
+.modal,#trashModal .trash-modal,#modal .unified-add-modal,#confirmModal .confirm-action-modal{
+  background:rgba(10,11,13,.86)!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:0 25px 80px rgba(0,0,0,.68)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.trash-subtitle,.confirm-action-modal .confirm-subtitle,.confirm-message,.dup-box{color:#96999f!important}
+.icon-close,#trashModal #closeTrash,#modal #closeAdd,#confirmModal #closeConfirm{
+  border-color:rgba(255,255,255,.14)!important;background:rgba(10,11,13,.68)!important;color:#c7c9cc!important;box-shadow:none!important;
+}
+.icon-close:hover,#trashModal #closeTrash:hover,#modal #closeAdd:hover,#confirmModal #closeConfirm:hover{
+  border-color:rgba(255,255,255,.34)!important;background:rgba(255,255,255,.075)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.025)!important;
+}
+.form-actions{border-top-color:rgba(255,255,255,.10)!important}
+
+/* Trash modal: white Restore/Close; permanent delete stays red. */
+#trashModal .history-note{background:rgba(12,13,15,.72)!important;border-color:rgba(255,255,255,.10)!important;color:#a9adb3!important}
+#trashModal .trash-item{background:rgba(12,13,15,.72)!important;border-color:rgba(255,255,255,.11)!important;box-shadow:0 6px 18px rgba(0,0,0,.18)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#trashModal .trash-name{color:#f3f3f3!important}
+#trashModal .trash-empty{background:rgba(12,13,15,.62)!important;border-color:rgba(255,255,255,.12)!important}
+#trashModal .trash-actions button[data-restore-trash]{border-color:rgba(255,255,255,.34)!important;background:rgba(255,255,255,.035)!important;color:#eef1f4!important;box-shadow:none!important}
+#trashModal .trash-actions button[data-restore-trash]:hover{border-color:rgba(255,255,255,.82)!important;background:rgba(255,255,255,.10)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 16px rgba(255,255,255,.12)!important}
+#trashModal .trash-actions button[data-restore-trash]:active{background:rgba(255,255,255,.075)!important;box-shadow:0 0 12px rgba(255,255,255,.09)!important}
+#trashModal .trash-actions button[data-delete-trash],#trashModal #emptyTrash{border-color:color-mix(in srgb,var(--dislike) 55%,#303236 45%)!important;background:color-mix(in srgb,var(--dislike) 7%,#0b0c0e 93%)!important;color:color-mix(in srgb,var(--dislike) 64%,white 36%)!important;box-shadow:none!important}
+#trashModal .trash-actions button[data-delete-trash]:hover,#trashModal #emptyTrash:hover{border-color:var(--dislike)!important;background:color-mix(in srgb,var(--dislike) 14%,#0b0c0e 86%)!important;color:color-mix(in srgb,var(--dislike) 44%,white 56%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--dislike) 14%,transparent),0 0 16px color-mix(in srgb,var(--dislike) 22%,transparent)!important}
+#trashModal #closeTrash2{border-color:rgba(255,255,255,.30)!important;background:rgba(255,255,255,.035)!important;color:#eef1f4!important;box-shadow:none!important}
+#trashModal #closeTrash2:hover{border-color:rgba(255,255,255,.78)!important;background:rgba(255,255,255,.10)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 16px rgba(255,255,255,.10)!important}
+
+/* Add Game modal: graphite rows and fields, contextual rating accent, gold favorite. */
+#modal .unified-add-modal{--add-modal-accent:var(--planned)}
+#modal .game-entry-row{--entry-accent:var(--planned);background:rgba(12,13,15,.72)!important;border-color:rgba(255,255,255,.11)!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#modal .game-entry-row:has(.game-entry-rating.rating-liked){--entry-accent:var(--like)}
+#modal .game-entry-row:has(.game-entry-rating.rating-normal){--entry-accent:var(--normal)}
+#modal .game-entry-row:has(.game-entry-rating.rating-disliked){--entry-accent:var(--dislike)}
+#modal .game-entry-row:has(.game-entry-rating.rating-in-progress){--entry-accent:var(--progress)}
+#modal .game-entry-row:has(.game-entry-rating.rating-planned){--entry-accent:var(--planned)}
+#modal .game-entry-row:has(.game-entry-rating.rating-favorite){--entry-accent:var(--favorite)}
+#modal .game-entry-row:focus-within{background:rgba(17,18,20,.76)!important;border-color:color-mix(in srgb,var(--entry-accent) 48%,#303236 52%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--entry-accent) 10%,transparent),0 0 14px color-mix(in srgb,var(--entry-accent) 8%,transparent)!important}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-liked){--add-modal-accent:var(--like)}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-normal){--add-modal-accent:var(--normal)}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-disliked){--add-modal-accent:var(--dislike)}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-in-progress){--add-modal-accent:var(--progress)}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-planned){--add-modal-accent:var(--planned)}
+#modal .unified-add-modal:has(.game-entry-row:focus-within .game-entry-rating.rating-favorite){--add-modal-accent:var(--favorite)}
+#modal .game-entry-name,#modal .game-entry-rating{background:rgba(10,11,13,.68)!important;border-color:#303236!important;box-shadow:none!important}
+#modal .game-entry-name{color:#f1f1f1!important}
+#modal .game-entry-name:focus,#modal .game-entry-name:focus-visible,#modal .game-entry-rating:focus,#modal .game-entry-rating:focus-visible{outline:none!important;border-color:var(--entry-accent)!important;background:color-mix(in srgb,var(--entry-accent) 5%,rgba(10,11,13,.72) 95%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--entry-accent) 14%,transparent),0 0 12px color-mix(in srgb,var(--entry-accent) 12%,transparent)!important}
+#modal .game-entry-favorite{background:rgba(10,11,13,.68)!important;border-color:#303236!important;color:#6f7379!important;box-shadow:none!important}
+#modal .game-entry-favorite:has(input:disabled){opacity:.52!important;cursor:not-allowed!important}
+#modal .game-entry-favorite:not(:has(input:disabled)):hover{border-color:color-mix(in srgb,var(--favorite) 62%,#303236 38%)!important;background:color-mix(in srgb,var(--favorite) 8%,#0c0d0f 92%)!important;color:var(--favorite)!important;box-shadow:0 0 12px color-mix(in srgb,var(--favorite) 16%,transparent)!important}
+#modal .game-entry-favorite:has(input:checked){border-color:var(--favorite)!important;background:color-mix(in srgb,var(--favorite) 10%,#0c0d0f 90%)!important;color:var(--favorite)!important;box-shadow:0 0 14px color-mix(in srgb,var(--favorite) 18%,transparent)!important}
+#modal .add-entry-btn{background:rgba(10,11,13,.68)!important;border-color:rgba(255,255,255,.18)!important;color:#d7dade!important;box-shadow:none!important}
+#modal .add-entry-btn:hover{border-color:var(--add-modal-accent)!important;background:color-mix(in srgb,var(--add-modal-accent) 10%,#0c0d0f 90%)!important;color:color-mix(in srgb,var(--add-modal-accent) 46%,white 54%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--add-modal-accent) 12%,transparent),0 0 15px color-mix(in srgb,var(--add-modal-accent) 20%,transparent)!important}
+#modal #cancelAdd{border-color:rgba(255,255,255,.18)!important;background:rgba(10,11,13,.68)!important;color:#c6c9cd!important;box-shadow:none!important}
+#modal #cancelAdd:hover{border-color:rgba(255,255,255,.38)!important;background:rgba(255,255,255,.07)!important;color:#fff!important}
+#modal #saveAdd{border-color:color-mix(in srgb,var(--add-modal-accent) 62%,#303236 38%)!important;background:color-mix(in srgb,var(--add-modal-accent) 10%,#0b0c0e 90%)!important;color:color-mix(in srgb,var(--add-modal-accent) 48%,white 52%)!important;box-shadow:none!important}
+#modal #saveAdd:hover:not(:disabled){border-color:var(--add-modal-accent)!important;background:color-mix(in srgb,var(--add-modal-accent) 17%,#0b0c0e 83%)!important;color:color-mix(in srgb,var(--add-modal-accent) 34%,white 66%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--add-modal-accent) 16%,transparent),0 0 18px color-mix(in srgb,var(--add-modal-accent) 24%,transparent)!important}
+#modal #saveAdd:disabled{opacity:.48!important;filter:none!important;box-shadow:none!important}
+
+/* Confirmation dialog follows the same monochrome chrome; danger remains semantic red. */
+#confirmModal #cancelConfirm{border-color:rgba(255,255,255,.18)!important;background:rgba(10,11,13,.68)!important;color:#c6c9cd!important;box-shadow:none!important}
+#confirmModal #cancelConfirm:hover{border-color:rgba(255,255,255,.38)!important;background:rgba(255,255,255,.07)!important;color:#fff!important}
+#confirmModal #confirmAction:not(.danger){border-color:rgba(255,255,255,.30)!important;background:rgba(255,255,255,.04)!important;color:#eef1f4!important;box-shadow:none!important}
+#confirmModal #confirmAction:not(.danger):hover{border-color:rgba(255,255,255,.72)!important;background:rgba(255,255,255,.10)!important;color:#fff!important}
+#confirmModal #confirmAction.danger{border-color:color-mix(in srgb,var(--dislike) 58%,#303236 42%)!important;background:color-mix(in srgb,var(--dislike) 8%,#0b0c0e 92%)!important;color:color-mix(in srgb,var(--dislike) 62%,white 38%)!important}
+#confirmModal #confirmAction.danger:hover{border-color:var(--dislike)!important;background:color-mix(in srgb,var(--dislike) 15%,#0b0c0e 85%)!important;color:#fff!important;box-shadow:0 0 16px color-mix(in srgb,var(--dislike) 22%,transparent)!important}
+
+/* Explicit compositor hardening: translucent alpha only, no backdrop blur on repainted controls. */
+.table-wrap,.stat-card,.pagination .pageBtn,.pagination .pageIndicator,.toolbar .resetFilters,.search-wrap #search,.list-actions .add-game-action,.list-actions #trashData,.modal,#trashModal .trash-modal,#modal .unified-add-modal,#confirmModal .confirm-action-modal,#trashModal .history-note,#trashModal .trash-item,#modal .game-entry-row,#modal .game-entry-name,#modal .game-entry-rating,#modal .game-entry-favorite,#modal .add-entry-btn,.igroteka-select-trigger,.igroteka-select-menu{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Startup Preview 1 Hotfix 4 — Reset Fade Parity with accepted v1.1 Stable.
+   Animate the complete white control surface to its disabled resting frame
+   before toggling disabled. CSS-only; no window/native-geometry changes. */
+.toolbar .resetFilters{
+  transition:
+    border-color .78s cubic-bezier(.22,.61,.36,1),
+    background-color .78s cubic-bezier(.22,.61,.36,1),
+    color .78s cubic-bezier(.22,.61,.36,1),
+    box-shadow .78s cubic-bezier(.22,.61,.36,1),
+    opacity .78s cubic-bezier(.22,.61,.36,1),
+    filter .78s cubic-bezier(.22,.61,.36,1),
+    transform .45s cubic-bezier(.22,.61,.36,1)!important;
+}
+.toolbar .resetFilters.reset-press:not(:disabled),
+.toolbar .resetFilters.reset-fade-out:not(:disabled){pointer-events:none!important}
+.toolbar .resetFilters.reset-fade-out:not(:disabled){
+  animation:none!important;
+  border-color:rgba(255,255,255,.08)!important;
+  background:rgba(255,255,255,.018)!important;
+  color:var(--utility-white-muted,rgba(255,255,255,.42))!important;
+  box-shadow:none!important;
+  opacity:.42!important;
+  filter:none!important;
+  transform:none!important;
+}
+@media(prefers-reduced-motion:reduce){.toolbar .resetFilters{transition:none!important}}

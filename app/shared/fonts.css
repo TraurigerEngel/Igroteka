@@ -1,0 +1,5 @@
+/* GitHub Clean Data Edition: use locally installed Inter (no bundled font binaries). */
+@font-face{font-family:"Inter";src:local("Inter Regular"),local("Inter");font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:"Inter";src:local("Inter Medium"),local("Inter");font-style:normal;font-weight:500;font-display:swap}
+@font-face{font-family:"Inter";src:local("Inter SemiBold"),local("Inter");font-style:normal;font-weight:600;font-display:swap}
+@font-face{font-family:"Inter";src:local("Inter Bold"),local("Inter");font-style:normal;font-weight:700;font-display:swap}

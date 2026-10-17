@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ru" class="app-loading" data-igroteka-startup="loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Игротека</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<!-- GitHub Clean Data Edition: use local installed Inter / system fallback. -->
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="shared/modal-system.css">
+<link rel="stylesheet" href="shared/themed-select.css">
+
+
+
+<style id="igroteka-home-space">
+/* Standalone background prerequisites not duplicated by the canonical surface below. */
+body{position:relative;isolation:isolate}
+#igrotekaParticleFlow{contain:strict!important}
+.igroteka-route-overlay{z-index:10001!important}
+</style>
+
+<style id="igroteka-no-interactive-drag">
+/* Igroteka — интерактивные элементы нельзя перетаскивать */
+a, button, img, svg, [role="button"], [draggable="true"]{
+  -webkit-user-drag:none !important;
+  user-drag:none !important;
+}
+</style>
+
+
+<link rel="stylesheet" href="shared/fonts.css">
+<link rel="stylesheet" href="shared/route-transition.css">
+<link rel="stylesheet" href="shared/startup-preview.css">
+
+<style id="igroteka-add-row-layout">
+/* PATCH 022 — keep Add Game controls on one deterministic row at desktop widths. */
+.unified-add-modal .game-entry-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 190px 40px 28px!important;
+  grid-template-rows:38px auto!important;
+  align-items:center!important;
+  column-gap:8px!important;
+  row-gap:5px!important;
+}
+.unified-add-modal .game-entry-main{display:contents!important;}
+.unified-add-modal .game-entry-name{grid-column:1!important;grid-row:1!important;min-width:0!important;width:100%!important;}
+.unified-add-modal .game-entry-rating-wrap{grid-column:2!important;grid-row:1!important;min-width:0!important;width:100%!important;margin:0!important;align-self:center!important;}
+.unified-add-modal .game-entry-favorite{grid-column:3!important;grid-row:1!important;justify-self:center!important;align-self:center!important;}
+.unified-add-modal .game-entry-remove{grid-column:4!important;grid-row:1!important;justify-self:center!important;align-self:center!important;}
+.unified-add-modal .game-entry-error{grid-column:1 / -1!important;grid-row:2!important;}
+@media(max-width:700px){
+  .unified-add-modal .game-entry-row{grid-template-columns:minmax(0,1fr) 160px 40px 28px!important;}
+}
+@media(max-width:520px){
+  .unified-add-modal .game-entry-row{grid-template-columns:minmax(0,1fr) 40px 28px!important;grid-template-rows:38px 38px auto!important;}
+  .unified-add-modal .game-entry-name{grid-column:1 / -1!important;grid-row:1!important;}
+  .unified-add-modal .game-entry-rating-wrap{grid-column:1!important;grid-row:2!important;}
+  .unified-add-modal .game-entry-favorite{grid-column:2!important;grid-row:2!important;}
+  .unified-add-modal .game-entry-remove{grid-column:3!important;grid-row:2!important;}
+  .unified-add-modal .game-entry-error{grid-row:3!important;}
+}
+</style>
+
+</head>
+
+<style id="igroteka-space-background">
+/* Canonical Igroteka background: one root surface, no local page washes. */
+html{
+  width:100%;height:auto;min-height:100%;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  background:#020203 !important;
+  background-color:#020203 !important;
+  isolation:isolate;
+}
+body{
+  width:100%;height:auto;min-height:100vh;min-width:0;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  background:transparent !important;
+  background-color:transparent !important;
+}
+html::before,html::after,body::before,body::after{
+  content:none !important;
+  display:none !important;
+  background:none !important;
+  box-shadow:none !important;
+}
+#igrotekaParticleFlow{
+  position:fixed !important;inset:0 !important;
+  width:100% !important;height:100% !important;
+  z-index:1 !important;display:block;
+  pointer-events:none !important;
+  background:transparent !important;
+  mix-blend-mode:normal !important;
+  transform:none !important;
+  backface-visibility:visible !important;
+  isolation:auto !important;
+  will-change:auto !important;
+}
+main.wrap{position:relative;z-index:2;}
+</style>
+<body>
+<div id="igrotekaCustomTitlebar" role="banner" aria-label="Панель окна Игротеки">
+  <div class="ig-titlebar-inner">
+    <div class="ig-titlebar-drag" data-tauri-drag-region aria-hidden="true"></div>
+    <div class="ig-titlebar-name" data-tauri-drag-region>Игротека</div>
+    <div class="ig-titlebar-actions">
+      <button class="ig-titlebar-min" type="button" title="Свернуть" aria-label="Свернуть"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+      <button class="ig-titlebar-close" type="button" title="Закрыть" aria-label="Закрыть"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+</div>
+<div id="igrotekaStartupSplash" role="status" aria-label="Игротека загружается">
+  <div class="ig-startup-mark">
+    <svg class="ig-startup-gamepad" viewBox="0 0 90 68" width="98" height="75" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3.3" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M24 17h42c9 0 12 8 14 17l5 19c2 8-5 13-12 9L59 51H31L17 62C10 66 3 61 5 53l5-19c2-9 5-17 14-17Z"/>
+      <path d="M23 34h18M32 25v18"/><circle cx="60" cy="31" r="2.5" fill="currentColor" stroke="none"/><circle cx="69" cy="40" r="2.5" fill="currentColor" stroke="none"/>
+    </svg>
+  </div>
+  <div class="ig-startup-name">ИГРОТЕКА</div>
+  <div class="ig-startup-rule" aria-hidden="true"></div>
+</div>
+<div class="igroteka-route-overlay" aria-hidden="true"></div>
+<canvas id="igrotekaParticleFlow" aria-hidden="true"></canvas>
+<main class="wrap">
+  <section class="stats-panel">
+    <div class="quick-stats stat-init" id="quickStats">
+    <button class="stat-card total-card" type="button" data-filter-all="1"><b id="totalCount">0</b><span>Всего</span></button>
+    <button class="stat-card" type="button" data-filter-rating="Прохожу"><b id="inProgress">0</b><span class="stat-label"><svg class="lucide lucide-gamepad-2 lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="6" x2="10" y1="11" y2="11"></line><line x1="8" x2="8" y1="9" y2="13"></line><line x1="15" x2="15.01" y1="12" y2="12"></line><line x1="18" x2="18.01" y1="10" y2="10"></line><path d="M17.5 6.5 16 4H8L6.5 6.5A7.5 7.5 0 0 0 3 13v1.5a3 3 0 0 0 5.2 2.1L10 15h4l1.8 1.6a3 3 0 0 0 5.2-2.1V13a7.5 7.5 0 0 0-3.5-6.5Z"></path></svg>Прохожу</span></button>
+    <button class="stat-card" type="button" data-filter-rating="Понравилось"><b id="liked">0</b><span class="stat-label"><svg class="lucide lucide-heart lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6c-2.2-2.4-6-2.2-8.3.3L12 5.5l-.5-.6C9.2 2.4 5.4 2.2 3.2 4.6.9 7.1 1.1 11 3.4 13.4L12 22l8.6-8.6c2.3-2.4 2.5-6.3.2-8.8Z"></path></svg>Понравилось</span></button>
+    <button class="stat-card" type="button" data-filter-rating="Нормально"><b id="normalCount">0</b><span class="stat-label"><svg class="lucide lucide-circle-minus lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path></svg>Нормально</span></button>
+    <button class="stat-card" type="button" data-filter-rating="Не понравилось"><b id="disliked">0</b><span class="stat-label"><svg class="lucide lucide-heart-crack lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18.5 4.5C16.8 2.8 14 2.4 12 4.1 10 2.4 7.2 2.8 5.5 4.5 2.2 7.8 4.7 12.7 6 14l6 7 6-7c1.3-1.3 3.8-6.2.5-9.5Z"></path><path d="m12 8-1.5 3h3L12 14"></path></svg>Не понравилось</span></button>
+    <button class="stat-card" type="button" data-filter-rating="Запланировано"><b id="planned">0</b><span class="stat-label"><svg class="lucide lucide-calendar-plus lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg>Запланировано</span></button>
+    <button class="stat-card" type="button" data-filter-favorite="1"><b id="favoriteCount">0</b><span class="stat-label"><svg class="lucide lucide-star lucide-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.1 2.1 0 0 0 1.58 1.148l5.166.752a.53.53 0 0 1 .294.904l-3.738 3.644a2.1 2.1 0 0 0-.605 1.86l.882 5.143a.53.53 0 0 1-.769.56l-4.618-2.428a2.1 2.1 0 0 0-1.956 0l-4.618 2.428a.53.53 0 0 1-.769-.56l.882-5.143a2.1 2.1 0 0 0-.605-1.86L2.2 9.778a.53.53 0 0 1 .294-.904l5.166-.752a2.1 2.1 0 0 0 1.58-1.148z"></path></svg>Избранное</span></button>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <div class="search-wrap"><input id="search" type="search" aria-label="Поиск игры" placeholder="Поиск игры…" autocomplete="off"></div>
+    <select id="sort" aria-label="Сортировка игр" hidden tabindex="-1">
+      <option value="game-asc">Название А → Я</option>
+      <option value="game-desc">Название Я → А</option>
+    </select>
+    <button type="button" class="smallBtn resetFilters" id="reset" aria-label="Сбросить фильтры" disabled><span aria-hidden="true"><svg class="lucide lucide-rotate-ccw lucide-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg></span></button>
+  </div>
+  
+  <div class="list-nav" id="listNav">
+    <div class="list-actions">
+      <button class="add-game-action" id="add" aria-label="Добавить игру" type="button"><span class="action-icon" aria-hidden="true"><svg class="lucide lucide-plus lucide-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span><span class="action-label">Добавить игру</span></button>
+      <button id="trashData" aria-label="Корзина" type="button"><span class="trash-button-icon" aria-hidden="true"></span><span class="action-label">Корзина</span></button>
+    </div>
+    <div class="nav-controls">
+      <div class="pagination" id="pagination" aria-label="Пагинация"></div>
+    </div>
+  </div>
+  <div class="empty-results" id="emptyResults" hidden aria-live="polite">Ничего не найдено</div>
+  <div class="table-wrap" id="tableWrap">
+    <table aria-label="Список игр">
+      <colgroup><col class="game-col"><col class="rating-col"><col class="favorite-col"></colgroup>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal add-game-modal unified-add-modal" role="dialog" aria-modal="true" aria-labelledby="addGameTitle">
+    <div class="modal-head"><div><h2 id="addGameTitle">Добавить игру</h2><div class="trash-subtitle">Добавляй одну или несколько игр за раз</div></div><button type="button" id="closeAdd" class="icon-close" aria-label="Закрыть окно добавления игры"><svg class="lucide lucide-x lucide-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
+    <div id="gameEntries" class="game-entry-list" aria-live="polite"></div>
+    <button type="button" id="addGameRow" class="add-entry-btn" aria-label="Добавить ещё одну игру"><svg class="lucide lucide-plus lucide-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    <div class="dup-box" id="dupBox"></div>
+    <div class="form-actions">
+      <button id="cancelAdd" type="button">Отмена</button>
+      <button class="primary" id="saveAdd" type="button">Добавить игры</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="trashModal">
+  <div class="modal history-modal trash-modal" role="dialog" aria-modal="true" aria-labelledby="trashTitle">
+    <div class="modal-head"><div><h2 id="trashTitle">Корзина</h2><div class="trash-subtitle">Удалённые игры · восстановление доступно</div></div><button type="button" id="closeTrash" class="icon-close" aria-label="Закрыть корзину"><svg class="lucide lucide-x lucide-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div>
+    <p class="history-note">Игры хранятся здесь до окончательного удаления. Восстановление вернёт игру в основной список.</p>
+    <div id="trashList" class="trash-list" aria-live="polite"></div>
+    <div class="form-actions"><button id="emptyTrash" class="danger" type="button">Очистить корзину</button><button id="closeTrash2" type="button">Закрыть</button></div>
+  </div>
+</div>
+
+
+<div class="modal-backdrop" id="confirmModal">
+  <div class="modal confirm-action-modal" id="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-head">
+      <div class="confirm-heading">
+        <div class="confirm-action-icon" id="confirmIcon" aria-hidden="true">!</div>
+        <div>
+          <h2 id="confirmTitle">Подтвердить действие</h2>
+          <div class="confirm-subtitle" id="confirmSubtitle"></div>
+        </div>
+      </div>
+      <button type="button" id="closeConfirm" class="icon-close" aria-label="Закрыть окно подтверждения"><svg class="lucide lucide-x lucide-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    </div>
+    <p class="confirm-message" id="confirmMessage"></p>
+    <div class="form-actions">
+      <button id="cancelConfirm" type="button">Отмена</button>
+      <button id="confirmAction" type="button">Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<script src="shared/route-transition.js"></script>
+<script>
+  // Reveal the standalone UI only after local fonts/images have had a paint opportunity.
+  window.igrotekaRouteTransition.reveal();
+</script>
+<script>
+/* v1.0 Theme Preview 1 background — Cinema Mono full-spectrum living particles. */
+/* Short local glint crosses + fast-particle streaks are retained; wrapped particles never draw a cross-screen streak. */
+/* Animation caps at 90 FPS and pauses while hidden. */
+(()=>{
+  const canvas=document.getElementById('igrotekaParticleFlow');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d',{alpha:true});
+  if(!ctx) return;
+  let w=0,h=0,dpr=1,last=performance.now(),lastFrame=0,rafId=0;
+  let particles=[],stars=[],glints=[];
+  const MAX_FPS=90;
+  const FRAME_INTERVAL=1000/MAX_FPS;
+  const TAU=Math.PI*2;
+  const rand=(a,b)=>a+Math.random()*(b-a);
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const HUE_CYCLE_SECONDS=72;
+  const HUE_SPEED=360/HUE_CYCLE_SECONDS;
+  const hslToRgb=(h,s,l)=>{h=((h%360)+360)%360;s/=100;l/=100;const c=(1-Math.abs(2*l-1))*s,x=c*(1-Math.abs((h/60)%2-1)),m=l-c/2;let r=0,g=0,b=0;if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}return `${Math.round((r+m)*255)},${Math.round((g+m)*255)},${Math.round((b+m)*255)}`};
+  const RGB_WHEEL=Array.from({length:360},(_,h)=>hslToRgb(h,82,70));
+  const colorAt=(baseHue,t)=>RGB_WHEEL[(Math.floor(baseHue+t*HUE_SPEED)%360+360)%360];
+  function resize(){
+    const root=document.documentElement;
+    const rect=canvas.getBoundingClientRect();
+    dpr=Math.min(window.devicePixelRatio||1,1.5);
+    w=Math.max(1,Math.round(rect.width||root.clientWidth||innerWidth));
+    h=Math.max(1,Math.round(rect.height||root.clientHeight||innerHeight));
+    const pixelW=Math.max(1,Math.ceil(w*dpr));
+    const pixelH=Math.max(1,Math.ceil(h*dpr));
+    if(canvas.width!==pixelW) canvas.width=pixelW;
+    if(canvas.height!==pixelH) canvas.height=pixelH;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+  }
+  const clusters=[
+    [.06,.12,.16],[.16,.25,.12],[.28,.11,.12],[.43,.18,.10],
+    [.58,.10,.13],[.73,.14,.15],[.88,.18,.15],[.96,.34,.13],
+    [.08,.45,.14],[.20,.56,.12],[.34,.66,.12],[.50,.54,.10],
+    [.65,.62,.14],[.80,.56,.13],[.92,.72,.15],[.14,.78,.13],
+    [.28,.88,.14],[.44,.82,.11],[.60,.90,.13],[.78,.86,.14],[.92,.90,.13]
+  ];
+  function spawnParticle(clustered=false){
+    let x,y;
+    if(clustered){
+      const c=clusters[(Math.random()*clusters.length)|0],a=rand(0,TAU),rr=Math.pow(Math.random(),1.75)*c[2];
+      x=c[0]+Math.cos(a)*rr;y=c[1]+Math.sin(a)*rr*.72;
+    }else{x=rand(-.02,1.02);y=rand(-.01,1.01);}
+    if(Math.abs(x-.5)<.11&&y>.15&&y<.53&&Math.random()<.84)x+=(x<.5?-1:1)*rand(.035,.13);
+    const depth=Math.random(),fast=depth>.865;
+    return {x,y,vx:rand(-.000012,.000012)*(fast?2.15:.88),vy:rand(-.000011,.000011)*(fast?1.92:.82),drift:rand(.000005,.000023),phase:rand(0,TAU),phase2:rand(0,TAU),size:fast?rand(1.00,2.35):(depth>.66?rand(.62,1.52):rand(.30,.96)),alpha:fast?rand(.52,.96):(depth>.66?rand(.35,.76):rand(.20,.58)),hue:rand(0,360),shape:(()=>{const r=Math.random();return r<.06?'diamond':r<.18?'stretched':'round'})(),wobble:rand(.000007,.000026),fast,twinkle:rand(.50,2.3),seed:rand(0,1000)};
+  }
+  function spawnStar(){const depth=Math.random();return{x:rand(-.02,1.02),y:rand(-.02,1.02),phase:rand(0,TAU),size:depth>.90?rand(.66,1.08):(depth>.62?rand(.42,.78):rand(.22,.52)),alpha:depth>.90?rand(.30,.62):(depth>.62?rand(.18,.40):rand(.08,.25)),drift:rand(.0000010,.0000044),hue:rand(0,360),depth};}
+  function spawnGlint(){return{x:rand(.03,.97),y:rand(.03,.97),phase:rand(0,TAU),period:rand(3.2,7.4),size:rand(1.0,1.9),alpha:rand(.18,.46),hue:rand(0,360)};}
+  function rebuild(){const count=Math.min(1680,Math.max(1220,Math.round(w*h/1240)));const clustered=Math.round(count*.54);particles=Array.from({length:count},(_,i)=>spawnParticle(i<clustered));stars=Array.from({length:Math.min(520,Math.max(330,Math.round(w*h/6200)))},spawnStar);glints=Array.from({length:Math.min(34,Math.max(18,Math.round(w*h/42000)))},spawnGlint);}
+  function draw(now){
+    rafId=0;
+    if(document.hidden) return;
+    if(lastFrame&&now-lastFrame<FRAME_INTERVAL-.5){rafId=requestAnimationFrame(draw);return;}
+    lastFrame=now;
+    const dt=Math.min(40,now-last);last=now;const t=now*.001;ctx.clearRect(0,0,w,h);
+    for(const s of stars){s.x+=Math.sin(t*.05+s.phase)*s.drift;if(s.x<-.03)s.x=1.03;if(s.x>1.03)s.x=-.03;const x=s.x*w,y=s.y*h,tw=.80+.20*Math.sin(t*(.10+s.depth*.18)+s.phase),a=s.alpha*tw,r=s.size,starCol=colorAt(s.hue,t);ctx.beginPath();ctx.fillStyle=`rgba(${starCol},${a})`;ctx.ellipse(x,y,r,r,0,0,TAU);ctx.fill();}
+    for(const g of glints){const x=g.x*w,y=g.y*h,pulse=Math.max(0,Math.sin(t*(TAU/g.period)+g.phase));if(pulse<.78)continue;const a=g.alpha*((pulse-.78)/.22),r=g.size*(.72+.28*pulse),col=colorAt(g.hue,t);ctx.beginPath();ctx.strokeStyle=`rgba(${col},${a*.28})`;ctx.lineWidth=.55;ctx.lineCap='round';ctx.moveTo(x-r*3.5,y);ctx.lineTo(x+r*3.5,y);ctx.moveTo(x,y-r*3.5);ctx.lineTo(x,y+r*3.5);ctx.stroke();ctx.beginPath();ctx.fillStyle=`rgba(${col},${a})`;ctx.arc(x,y,r,0,TAU);ctx.fill();}
+    for(const p of particles){const oldX=p.x*w,oldY=p.y*h,n1=Math.sin(t*.31+p.phase+p.y*9.1),n2=Math.cos(t*.23+p.phase2+p.x*7.3),n3=Math.sin(t*.11+p.seed+p.x*4.0-p.y*6.0),turbulence=(n1*.55+n2*.30+n3*.15)*p.wobble,curl=Math.cos(t*.19+p.phase2+p.y*5.5)*p.wobble*.68,speed=p.fast?1.78:.94;p.x+=(p.vx+(p.x<.5?p.drift:-p.drift)*.18+turbulence)*dt*speed;p.y+=(p.vy+curl+Math.sin(t*.17+p.phase)*.0000035)*dt*speed;p.x+=Math.sin(t*.13+p.phase2+p.y*8.0)*.0000032*dt*speed;p.y+=Math.cos(t*.16+p.phase+p.x*6.0)*.0000030*dt*speed;let wrapped=false;if(p.x<-.05){p.x=1.05;wrapped=true;}if(p.x>1.05){p.x=-.05;wrapped=true;}if(p.y<-.05){p.y=1.05;wrapped=true;}if(p.y>1.05){p.y=-.05;wrapped=true;}const x=p.x*w,y=p.y*h,pulse=.72+.28*Math.sin(t*p.twinkle+p.phase),grain=.86+.14*Math.sin(t*.21+p.phase2*1.7+p.x*12-p.y*8),a=clamp(p.alpha*pulse*grain,.055,.98),r=p.size*(.82+.18*Math.sin(t*.9+p.phase2)),rgb=colorAt(p.hue,t);if(p.fast&&r>1.05&&!wrapped){ctx.beginPath();ctx.moveTo(oldX,oldY);ctx.lineTo(x,y);ctx.lineWidth=Math.max(.35,r*.38);ctx.lineCap='round';ctx.strokeStyle=`rgba(${rgb},${a*.23})`;ctx.stroke();}ctx.beginPath();ctx.fillStyle=`rgba(${rgb},${a})`;if(p.shape==='diamond'){ctx.moveTo(x,y-r*1.25);ctx.lineTo(x+r*1.05,y);ctx.lineTo(x,y+r*1.25);ctx.lineTo(x-r*1.05,y);ctx.closePath();ctx.fill();}else if(p.shape==='stretched'){ctx.ellipse(x,y,r*1.45,r*.72,Math.atan2(p.vy,p.vx),0,TAU);ctx.fill();}else{ctx.arc(x,y,r,0,TAU);ctx.fill();}}
+    rafId=requestAnimationFrame(draw);
+  }
+  let primed=false;
+  function startAnimation(){
+    if(document.hidden||rafId||(!primed&&document.documentElement.dataset.igrotekaStartup!=="ready"))return;
+    last=performance.now();lastFrame=0;rafId=requestAnimationFrame(draw);
+  }
+  function stopAnimation(){if(rafId)cancelAnimationFrame(rafId);rafId=0;}
+  resize();rebuild();
+  window.addEventListener('resize',()=>{resize();rebuild();},{passive:true});
+  window.visualViewport?.addEventListener('resize',()=>{resize();rebuild();},{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAnimation();else startAnimation();});
+  document.addEventListener('igroteka:particles-prime',()=>{primed=true;startAnimation();});
+  document.addEventListener('igroteka:startup-complete',startAnimation);
+  startAnimation();
+})();
+</script>
+
+<script src="shared/lucide-icons.js"></script>
+<script src="shared/modal-system.js"></script>
+<script src="shared/browser-guard.js"></script>
+<script src="shared/themed-select.js"></script>
+<script src="shared/igroteka-bridge.js"></script>
+<script>
+(() => {
+  // Prevent native HTML drag-and-drop of controls, links, icons and cards.
+  // Text editing inside inputs/textareas/contenteditable stays available.
+  const isDragBlocked = el => {
+    if (!(el instanceof Element)) return false;
+    return !!el.closest('a,button,img,svg,[role="button"],[draggable="true"]');
+  };
+  document.addEventListener('dragstart', event => {
+    if (isDragBlocked(event.target)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
+})();
+</script>
+</body>
+
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

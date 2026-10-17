@@ -1,0 +1,36 @@
+/* IGROTEKA STARTUP / TITLEBAR PREVIEW 1 — scoped, early first paint. */
+html.app-loading body{visibility:visible!important}
+html[data-igroteka-startup="loading"] main.wrap{visibility:hidden!important}
+html[data-igroteka-startup="revealing"] main.wrap{visibility:visible!important;opacity:1}
+html[data-igroteka-startup="ready"] main.wrap{visibility:visible!important;opacity:1}
+#igrotekaCustomTitlebar{all:initial;display:block!important;position:fixed!important;inset:0 0 auto 0!important;width:100%!important;height:42px!important;z-index:2147483000!important;color:#ecebed;font-family:Inter,system-ui,"Segoe UI",sans-serif!important;user-select:none!important;-webkit-user-select:none!important;box-sizing:border-box!important}
+#igrotekaCustomTitlebar *{box-sizing:border-box!important}
+#igrotekaCustomTitlebar .ig-titlebar-inner{display:grid!important;grid-template-columns:minmax(92px,1fr) auto minmax(92px,1fr)!important;align-items:center!important;height:42px!important;background:rgba(3,3,4,.92)!important;border-bottom:1px solid rgba(255,255,255,.085)!important;box-shadow:0 6px 22px rgba(0,0,0,.15)!important}
+#igrotekaCustomTitlebar .ig-titlebar-drag{height:42px!important}
+#igrotekaCustomTitlebar .ig-titlebar-name{display:flex!important;align-items:center!important;justify-content:center!important;height:42px!important;padding:0 12px!important;white-space:nowrap!important;font:700 15px/1 Inter,system-ui,"Segoe UI",sans-serif!important;letter-spacing:.01em!important;color:#eee!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions{display:flex!important;justify-self:end!important;height:42px!important;-webkit-app-region:no-drag!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button{all:unset;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;width:46px!important;height:42px!important;cursor:pointer!important;color:#d5d5d8!important;background:transparent!important;border:0!important;border-radius:0!important;outline:0!important;box-shadow:none!important;user-select:none!important;-webkit-app-region:no-drag!important;transition:background-color .16s ease!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button svg{display:block!important;flex:none!important;width:16px!important;height:16px!important;pointer-events:none!important;opacity:0!important;transition:opacity .16s ease!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button:hover svg,#igrotekaCustomTitlebar .ig-titlebar-actions button:focus-visible svg{opacity:1!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button:hover,#igrotekaCustomTitlebar .ig-titlebar-actions button:focus-visible{background:rgba(255,255,255,.085)!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button.ig-titlebar-close:hover,#igrotekaCustomTitlebar .ig-titlebar-actions button.ig-titlebar-close:focus-visible{background:#b83e62!important;color:white!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button:focus-visible{outline:1px solid rgba(255,255,255,.58)!important;outline-offset:-2px!important}
+#igrotekaStartupSplash{position:fixed!important;inset:42px 0 0!important;z-index:2000000000!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:18px!important;margin:0!important;background:#020203!important;color:#eee!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;transition:opacity 630ms cubic-bezier(.22,.61,.36,1),visibility 0s linear 630ms!important}
+#igrotekaStartupSplash .ig-startup-mark{display:grid;place-items:center;width:108px;height:96px;color:#ddbae9;filter:drop-shadow(0 0 24px rgba(169,112,255,.14));animation:ig-splash-enter 700ms cubic-bezier(.22,.61,.36,1) both}
+#igrotekaStartupSplash .ig-startup-gamepad{width:98px!important;height:75px!important;display:block!important}
+#igrotekaStartupSplash .ig-startup-name{font:700 clamp(19px,2.3vw,26px)/1.25 Inter,system-ui,sans-serif!important;letter-spacing:.25em!important;text-indent:.25em!important;color:#eee!important;text-align:center!important;animation:ig-splash-enter 720ms 100ms both}
+#igrotekaStartupSplash .ig-startup-rule{width:72px;height:1px;background:linear-gradient(90deg,transparent,#bd8aca,transparent);animation:ig-splash-enter 720ms 180ms both}
+html[data-igroteka-startup="revealing"] #igrotekaStartupSplash{opacity:0!important;pointer-events:none!important}
+html[data-igroteka-startup="ready"] #igrotekaStartupSplash{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:none!important}
+@keyframes ig-splash-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#igrotekaStartupSplash,#igrotekaCustomTitlebar .ig-titlebar-actions button,#igrotekaCustomTitlebar .ig-titlebar-actions button svg{transition:none!important}#igrotekaStartupSplash .ig-startup-mark,#igrotekaStartupSplash .ig-startup-name,#igrotekaStartupSplash .ig-startup-rule{animation:none!important}}
+
+/* Startup Hotfix 1: reveal the pre-warmed canonical particle canvas with the splash. */
+#igrotekaParticleFlow{opacity:0!important;transition:opacity 630ms cubic-bezier(.22,.61,.36,1)!important}
+html[data-igroteka-startup="revealing"] #igrotekaParticleFlow,
+html[data-igroteka-startup="ready"] #igrotekaParticleFlow{opacity:1!important}
+@media(prefers-reduced-motion:reduce){#igrotekaParticleFlow{transition:none!important}}
+
+/* Visible feedback when a slow SQLite write temporarily delays window closing. */
+#igrotekaCustomTitlebar .ig-titlebar-actions button.ig-titlebar-close[aria-busy="true"]{background:rgba(184,62,98,.35)!important}
+#igrotekaCustomTitlebar .ig-titlebar-actions button.ig-titlebar-close[aria-busy="true"] svg{opacity:1!important}

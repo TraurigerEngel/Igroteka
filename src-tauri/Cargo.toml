@@ -1,0 +1,29 @@
+[package]
+name = "igroteka-standalone"
+version = "1.1.0"
+description = "Igroteka Standalone v1.1 Stable"
+authors = ["Trauriger Engel"]
+edition = "2024"
+rust-version = "1.90"
+
+[lib]
+name = "igroteka_standalone_lib"
+crate-type = ["rlib"]
+
+[[bin]]
+name = "igroteka"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2.7.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.12.0", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+chrono = { version = "0.4", default-features = true, features = ["clock"] }
+
+[target.'cfg(windows)'.dependencies]
+webview2-com = "0.39.1"
+windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_Security", "Win32_System_Threading", "Win32_UI_WindowsAndMessaging"] }

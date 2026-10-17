@@ -1,0 +1,31 @@
+/* Global: scrolling remains enabled, but no visible scrollbar is rendered anywhere. */
+*,*::before,*::after{scrollbar-width:none;-ms-overflow-style:none}
+*::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+/* Igroteka standalone modal presentation. */
+.modal-backdrop{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .26s ease, visibility 0s linear .26s;
+  display:flex!important;
+}
+.modal-backdrop.show,
+.modal-backdrop.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transition:opacity .26s ease, visibility 0s linear 0s;
+}
+.modal-backdrop.closing{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.modal-backdrop .modal{will-change:transform,opacity;}
+html.modal-open,body.modal-open{overflow:hidden!important;}
+@media(prefers-reduced-motion:reduce){
+  .modal-backdrop,.modal{transition:none!important}
+}
+
+/* Igroteka native-dialog replacement. Runtime behavior lives in modal-system.js. */
+.igroteka-dialog-open,.igroteka-dialog-open body{overflow:hidden!important}

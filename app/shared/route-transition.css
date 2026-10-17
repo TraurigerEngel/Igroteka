@@ -1,0 +1,7 @@
+/* Igroteka startup reveal transition. */
+.igroteka-route-overlay{
+  position:fixed;inset:0;z-index:10001;pointer-events:none;opacity:1;background:#020203;
+  transition:opacity .20s cubic-bezier(.22,.61,.36,1);will-change:opacity;
+}
+body.igroteka-route-ready .igroteka-route-overlay{opacity:0}
+@media(prefers-reduced-motion:reduce){.igroteka-route-overlay{transition:none}}

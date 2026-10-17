@@ -1,0 +1,17 @@
+IGROTEKA v1.1.0 - CLEAN DATA SOURCE (WINDOWS 11)
+
+This GitHub source package has no original user games or favorites.
+The source seed-data/igroteka.sqlite3 contains 0 games and 0 trash rows.
+The personal data/igroteka.sqlite3 is NOT tracked by Git.
+
+1. Open PowerShell in the cloned source folder.
+2. Run INIT-DEMO-DATA.cmd (initializes local data only when missing).
+3. Run npm ci.
+4. Run npm run verify.
+5. Run BUILD-DEV.cmd, then check the Windows application visually.
+6. Before publishing Release, check particle edge wraps and persistence.
+7. Only after verification, run MAKE-FINAL-RELEASE.cmd.
+
+The built EXE from the original Portable archive has NOT been modified.
+GitHub sources use installed Windows Inter font / fallback rather than bundled font files.
+README.md and GITHUB_PRIVACY_RU.md provide the complete instructions.

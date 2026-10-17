@@ -1,0 +1,234 @@
+/* Igroteka — fully themed custom select surface.
+   Native <select> stays as the data/event source; WebView2's native popup is never shown. */
+.igroteka-native-select-source{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  min-width:1px!important;
+  min-height:1px!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  clip-path:inset(50%)!important;
+  overflow:hidden!important;
+  border:0!important;
+  background:none!important;
+}
+.igroteka-select-shell{
+  position:relative;
+  display:block;
+  width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  font:inherit;
+  color:inherit;
+}
+.igroteka-select-trigger{
+  width:100%;
+  min-width:0;
+  height:100%;
+  min-height:34px;
+  box-sizing:border-box;
+  display:block;
+  padding:0 10px;
+  border:1px solid var(--igroteka-select-border);
+  border-radius:9px;
+  background:var(--igroteka-select-bg);
+  color:var(--igroteka-select-text);
+  font:inherit;
+  line-height:1.2;
+  text-align:left;
+  cursor:pointer;
+  outline:none;
+  box-shadow:none;
+  transition:border-color .14s ease,background .14s ease,box-shadow .14s ease;
+}
+.igroteka-select-trigger:hover{border-color:var(--igroteka-select-border-hover);background:var(--igroteka-select-bg-hover)}
+.igroteka-select-trigger:focus-visible,
+.igroteka-select-shell[data-open="1"] .igroteka-select-trigger{
+  border-color:var(--igroteka-select-border-focus);
+  background:var(--igroteka-select-bg-focus);
+  box-shadow:0 0 0 1px var(--igroteka-select-focus-ring);
+}
+.igroteka-select-trigger:disabled{opacity:.52;cursor:not-allowed}
+.igroteka-select-label{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.igroteka-select-menu{
+  position:fixed;
+  z-index:40000;
+  box-sizing:border-box;
+  min-width:90px;
+  max-height:min(320px,calc(100vh - 20px));
+  padding:5px;
+  overflow:auto;
+  border:1px solid var(--igroteka-select-menu-border);
+  border-radius:10px;
+  background:var(--igroteka-select-menu-bg);
+  color:var(--igroteka-select-text);
+  box-shadow:0 18px 46px rgba(0,0,0,.50),0 0 0 1px var(--igroteka-select-menu-inner) inset;
+  scrollbar-width:thin;
+  overscroll-behavior:contain;
+}
+.igroteka-select-menu[hidden]{display:none!important}
+.igroteka-select-option{
+  width:100%;
+  min-height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding:6px 9px;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:var(--igroteka-select-text);
+  font:inherit;
+  line-height:1.25;
+  text-align:left;
+  cursor:pointer;
+  outline:none;
+  white-space:nowrap;
+}
+.igroteka-select-option:hover,
+.igroteka-select-option:focus-visible{background:var(--igroteka-select-option-hover)}
+.igroteka-select-option[aria-selected="true"]{background:var(--igroteka-select-option-selected);color:var(--igroteka-select-text-strong)}
+.igroteka-select-option:disabled{opacity:.45;cursor:not-allowed}
+
+/* PATCH 023 — rating menus: centered labels and slightly wider selection surface. */
+.igroteka-select-menu-rating-table,
+.igroteka-select-menu-rating-entry{padding-left:3px;padding-right:3px}
+.igroteka-select-menu-rating-table .igroteka-select-option,
+.igroteka-select-menu-rating-entry .igroteka-select-option{
+  justify-content:center;
+  text-align:center;
+  padding-left:6px;
+  padding-right:6px;
+}
+
+/* Igroteka — dark violet library palette. */
+.igroteka-select-theme-library{
+  --igroteka-select-bg:#17141d;
+  --igroteka-select-bg-hover:#1b1721;
+  --igroteka-select-bg-focus:#1d1824;
+  --igroteka-select-border:#3a3045;
+  --igroteka-select-border-hover:#594267;
+  --igroteka-select-border-focus:#6b4a80;
+  --igroteka-select-focus-ring:rgba(168,85,247,.10);
+  --igroteka-select-text:#cfc8d8;
+  --igroteka-select-text-strong:#f0e8f5;
+  --igroteka-select-menu-bg:#16131b;
+  --igroteka-select-menu-border:#40334b;
+  --igroteka-select-menu-inner:rgba(185,155,211,.045);
+  --igroteka-select-option-hover:#211a29;
+  --igroteka-select-option-selected:#2b2135;
+}
+
+/* Rating selects keep the project's semantic color language. */
+.igroteka-select-rating-table{width:max-content;max-width:100%;margin-left:auto;margin-right:auto}
+.igroteka-select-rating-table .igroteka-select-trigger{
+  width:max-content;max-width:100%;min-width:116px;
+  min-height:38px;height:38px;
+  border-color:transparent;background:transparent;
+  padding-left:8px;padding-right:8px;
+  text-align:center;
+}
+.igroteka-select-rating-table .igroteka-select-label{text-align:center}
+.igroteka-select-rating-table .igroteka-select-trigger:hover,
+.igroteka-select-rating-table[data-open="1"] .igroteka-select-trigger,
+.igroteka-select-rating-table .igroteka-select-trigger:focus-visible{background:#17141d;border-color:#3a3045;box-shadow:none}
+.igroteka-select-rating-entry{width:100%;height:38px;min-height:38px}
+.igroteka-select-rating-entry .igroteka-select-trigger{height:38px;min-height:38px;text-align:center}
+.igroteka-select-rating-entry .igroteka-select-label{text-align:center}
+
+/* Add-row rating uses one clean full-width control; decorative side dots are intentionally absent. */
+/* The base game-entry rule gives .game-entry-rating position:relative!important and a full 38px box.
+   Override it with higher specificity once the native select becomes the hidden data source, otherwise the
+   invisible native control still consumes the first 38px and pushes the themed trigger onto a second line. */
+.game-entry-rating-wrap > select.game-entry-rating.igroteka-native-select-source{
+  position:absolute!important;
+  inset:0 auto auto 0!important;
+  width:1px!important;
+  height:1px!important;
+  min-width:1px!important;
+  min-height:1px!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  clip-path:inset(50%)!important;
+  overflow:hidden!important;
+  border:0!important;
+  background:none!important;
+  z-index:-1!important;
+}
+.game-entry-rating-wrap > .igroteka-select-rating-entry{display:block!important;width:100%!important;min-width:0!important}
+
+/* Semantic rating colors mirror the hidden source select. */
+.rating-select.rating-liked + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-liked + .igroteka-select-shell .igroteka-select-trigger{color:var(--like,#FF5FB8)!important}
+.rating-select.rating-normal + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-normal + .igroteka-select-shell .igroteka-select-trigger{color:var(--normal,#AFA9BD)!important}
+.rating-select.rating-disliked + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-disliked + .igroteka-select-shell .igroteka-select-trigger{color:var(--dislike,#FF5F6D)!important}
+.rating-select.rating-in-progress + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-in-progress + .igroteka-select-shell .igroteka-select-trigger{color:var(--progress,#A970FF)!important}
+.rating-select.rating-planned + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-planned + .igroteka-select-shell .igroteka-select-trigger{color:var(--planned,#5B8CFF)!important}
+.rating-select.rating-favorite + .igroteka-select-shell .igroteka-select-trigger,
+.game-entry-rating.rating-favorite + .igroteka-select-shell .igroteka-select-trigger{color:var(--favorite,#FFC94D)!important}
+
+.igroteka-select-option.rating-liked,
+.igroteka-select-option[value="Понравилось"]{color:var(--like,#FF5FB8)!important}
+.igroteka-select-option.rating-normal,
+.igroteka-select-option[value="Нормально"]{color:var(--normal,#AFA9BD)!important}
+.igroteka-select-option.rating-disliked,
+.igroteka-select-option[value="Не понравилось"]{color:var(--dislike,#FF5F6D)!important}
+.igroteka-select-option.rating-in-progress,
+.igroteka-select-option[value="Прохожу"],
+.igroteka-select-option.rating-planned,
+.igroteka-select-option[value="Запланировано"]{color:var(--planned,#5B8CFF)!important}
+.igroteka-select-option.rating-favorite,
+.igroteka-select-option[value="Избранное"]{color:var(--favorite,#FFC94D)!important}
+
+
+/* v1.0 Theme Preview 1 — Cinema Mono themed-select parity. */
+.igroteka-select-theme-library{
+  --igroteka-select-bg:#0b0c0e;
+  --igroteka-select-bg-hover:#151619;
+  --igroteka-select-bg-focus:#151619;
+  --igroteka-select-border:#303236;
+  --igroteka-select-border-hover:#4b4e53;
+  --igroteka-select-border-focus:#6f7378;
+  --igroteka-select-focus-ring:rgba(255,255,255,.07);
+  --igroteka-select-text:#d4d5d7;
+  --igroteka-select-text-strong:#ffffff;
+  --igroteka-select-menu-bg:#08090b;
+  --igroteka-select-menu-border:#303236;
+  --igroteka-select-menu-inner:rgba(255,255,255,.035);
+  --igroteka-select-option-hover:#151619;
+  --igroteka-select-option-selected:#1d1f22;
+}
+.igroteka-select-rating-table .igroteka-select-trigger:hover,
+.igroteka-select-rating-table[data-open="1"] .igroteka-select-trigger,
+.igroteka-select-rating-table .igroteka-select-trigger:focus-visible{background:#151619!important;border-color:#303236!important;box-shadow:none!important}
+
+.rating-select.rating-liked + .igroteka-select-shell,.game-entry-rating.rating-liked + .igroteka-select-shell{--igroteka-rating-accent:var(--like,#FF5FB8)}
+.rating-select.rating-normal + .igroteka-select-shell,.game-entry-rating.rating-normal + .igroteka-select-shell{--igroteka-rating-accent:var(--normal,#AFA9BD)}
+.rating-select.rating-disliked + .igroteka-select-shell,.game-entry-rating.rating-disliked + .igroteka-select-shell{--igroteka-rating-accent:var(--dislike,#FF5F6D)}
+.rating-select.rating-in-progress + .igroteka-select-shell,.game-entry-rating.rating-in-progress + .igroteka-select-shell{--igroteka-rating-accent:var(--progress,#A970FF)}
+.rating-select.rating-planned + .igroteka-select-shell,.game-entry-rating.rating-planned + .igroteka-select-shell{--igroteka-rating-accent:var(--planned,#5B8CFF)}
+.rating-select.rating-favorite + .igroteka-select-shell,.game-entry-rating.rating-favorite + .igroteka-select-shell{--igroteka-rating-accent:var(--favorite,#FFC94D)}
+
+#modal .igroteka-select-rating-entry .igroteka-select-trigger{background:rgba(10,11,13,.68)!important;border-color:#303236!important;box-shadow:none!important}
+#modal .igroteka-select-rating-entry .igroteka-select-trigger:hover{background:color-mix(in srgb,var(--igroteka-rating-accent,#AFA9BD) 5%,#0b0c0e 95%)!important;border-color:color-mix(in srgb,var(--igroteka-rating-accent,#AFA9BD) 58%,#303236 42%)!important}
+#modal .igroteka-select-rating-entry[data-open="1"] .igroteka-select-trigger,#modal .igroteka-select-rating-entry .igroteka-select-trigger:focus-visible{background:color-mix(in srgb,var(--igroteka-rating-accent,#AFA9BD) 7%,#0b0c0e 93%)!important;border-color:var(--igroteka-rating-accent,#AFA9BD)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--igroteka-rating-accent,#AFA9BD) 14%,transparent),0 0 12px color-mix(in srgb,var(--igroteka-rating-accent,#AFA9BD) 12%,transparent)!important}
+
+.igroteka-select-menu-rating-entry,.igroteka-select-menu-rating-table{min-width:176px!important;overflow-x:hidden!important;overflow-y:auto!important;background:#08090b!important;border-color:#303236!important;box-shadow:0 18px 46px rgba(0,0,0,.62),0 0 0 1px rgba(255,255,255,.025) inset!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.igroteka-select-menu-rating-entry .igroteka-select-option,.igroteka-select-menu-rating-table .igroteka-select-option{--igroteka-rating-option-accent:#AFA9BD;background:transparent!important;min-width:0!important;padding-left:10px!important;padding-right:10px!important}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-liked,.igroteka-select-menu-rating-table .igroteka-select-option.rating-liked,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Понравилось"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Понравилось"]{--igroteka-rating-option-accent:var(--like,#FF5FB8)}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-normal,.igroteka-select-menu-rating-table .igroteka-select-option.rating-normal,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Нормально"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Нормально"]{--igroteka-rating-option-accent:var(--normal,#AFA9BD)}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-disliked,.igroteka-select-menu-rating-table .igroteka-select-option.rating-disliked,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Не понравилось"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Не понравилось"]{--igroteka-rating-option-accent:var(--dislike,#FF5F6D)}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-in-progress,.igroteka-select-menu-rating-table .igroteka-select-option.rating-in-progress,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Прохожу"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Прохожу"]{--igroteka-rating-option-accent:var(--progress,#A970FF);color:var(--progress,#A970FF)!important}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-planned,.igroteka-select-menu-rating-table .igroteka-select-option.rating-planned,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Запланировано"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Запланировано"]{--igroteka-rating-option-accent:var(--planned,#5B8CFF);color:var(--planned,#5B8CFF)!important}
+.igroteka-select-menu-rating-entry .igroteka-select-option.rating-favorite,.igroteka-select-menu-rating-table .igroteka-select-option.rating-favorite,.igroteka-select-menu-rating-entry .igroteka-select-option[value="Избранное"],.igroteka-select-menu-rating-table .igroteka-select-option[value="Избранное"]{--igroteka-rating-option-accent:var(--favorite,#FFC94D)}
+.igroteka-select-menu-rating-entry .igroteka-select-option:hover,.igroteka-select-menu-rating-entry .igroteka-select-option:focus-visible,.igroteka-select-menu-rating-entry .igroteka-select-option[data-active="1"],.igroteka-select-menu-rating-table .igroteka-select-option:hover,.igroteka-select-menu-rating-table .igroteka-select-option:focus-visible,.igroteka-select-menu-rating-table .igroteka-select-option[data-active="1"]{background:color-mix(in srgb,var(--igroteka-rating-option-accent) 9%,#0b0c0e 91%)!important}
+.igroteka-select-menu-rating-entry .igroteka-select-option[aria-selected="true"],.igroteka-select-menu-rating-table .igroteka-select-option[aria-selected="true"]{background:color-mix(in srgb,var(--igroteka-rating-option-accent) 18%,#0b0c0e 82%)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--igroteka-rating-option-accent) 44%,transparent) inset,0 0 12px color-mix(in srgb,var(--igroteka-rating-option-accent) 8%,transparent)!important}
